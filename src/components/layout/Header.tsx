@@ -1,22 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Menu, Phone } from "lucide-react";
+import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { navItems } from "@/data/navigation";
 import { MobileMenu } from "./MobileMenu";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import PhoneIcon from "../ui/icons/phoneIcon";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <>
@@ -24,76 +18,64 @@ export function Header() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={cn(
-          "fixed inset-x-0 top-0 z-30 transition-all duration-300",
-          scrolled
-            ? "bg-black/80 backdrop-blur-md shadow-md"
-            : "bg-transparent"
-        )}
+        className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-5"
         role="banner"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          {/* Left: hamburger + nav links */}
-          <div className="flex items-center gap-4">
+        <nav className="relative mx-auto flex max-w-7xl items-center justify-between rounded-2xl border border-white/10 bg-black/45 px-4 py-3 backdrop-blur-xl transition-all duration-300 sm:px-6">
+          {/* Left: hamburger (mobile) + nav links (desktop) */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setMenuOpen(true)}
-              aria-label="Open navigation menu"
+              aria-label="Toggle menu"
               aria-expanded={menuOpen}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-white/80 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal lg:hidden"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
             </button>
 
-            <nav aria-label="Primary" className="hidden md:flex items-center gap-6">
+            <ul className="hidden items-center gap-7 text-sm font-medium text-white/85 lg:flex">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm font-medium text-white/90 transition-colors hover:text-brand-teal focus-visible:outline-none focus-visible:underline"
-                >
-                  {item.label}
-                </Link>
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="transition-colors hover:text-brand-teal focus-visible:underline focus-visible:outline-none"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
               ))}
-            </nav>
+            </ul>
           </div>
 
-          {/* Center: Logo */}
+          {/* Center: Logo — absolutely centered in the nav bar */}
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
             aria-label="Ideal Factory – Home"
           >
-            <div className="flex items-center gap-2">
-              <IdealFactoryMark />
-              <div className="leading-tight">
-                <p className="text-sm font-bold text-white">Ideal</p>
-                <p className="text-sm font-bold text-white">Factory</p>
-              </div>
-            </div>
+            <Image
+              src="/images/logo-home.png"
+              alt="Ideal Factory logo"
+              width={155}
+              height={60}
+              className="h-9 w-auto object-contain"
+            />
           </Link>
 
           {/* Right: CTA */}
-          <a
-            href="#contact"
-            className="hidden items-center gap-2 rounded-full border border-brand-teal px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-brand-teal hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal sm:flex"
-          >
-            <Phone className="h-4 w-4 text-brand-teal" />
-            Start Your Project
-          </a>
-        </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="#contact"
+              className="bg-primary shadow-primary-20 hover:bg-primary-hover hidden items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition sm:inline-flex"
+            >
+              <PhoneIcon className="h-5 w-5 shrink-0" />
+              Start Your Project
+            </Link>
+          </div>
+        </nav>
       </motion.header>
 
       <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
-  );
-}
-
-function IdealFactoryMark() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <rect x="2" y="5" width="9" height="30" rx="2" fill="#4ECDC4" />
-      <rect x="15.5" y="12" width="9" height="23" rx="2" fill="#4ECDC4" />
-      <rect x="29" y="2" width="9" height="36" rx="2" fill="white" opacity="0.9" />
-    </svg>
   );
 }

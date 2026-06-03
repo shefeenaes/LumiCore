@@ -9,10 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        primary: "#57B7C0",
+        secondary: "#ffffff",
         brand: {
-          teal: "#4ECDC4",
-          "teal-dark": "#3ab5ac",
-          "teal-light": "#7edad5",
+          teal: "#57B7C0",
+          "teal-dark": "#3d9ea7",
+          "teal-light": "#7acdd4",
           dark: "#1a1a1a",
           "dark-card": "#252525",
           "dark-card-2": "#2e2e2e",
@@ -20,7 +22,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        poppins: ["var(--font-poppins)", "sans-serif"],
+        lexend: ["var(--font-lexend)", "sans-serif"],
         inter: ["var(--font-inter)", "sans-serif"],
       },
       backgroundImage: {

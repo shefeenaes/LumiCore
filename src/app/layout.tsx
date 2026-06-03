@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google";
+import { Lexend, Inter } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/constants";
 
-const poppins = Poppins({
+const lexend = Lexend({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  style: ["normal", "italic"],
-  variable: "--font-poppins",
+  variable: "--font-lexend",
   display: "swap",
   preload: true,
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
   preload: false,
@@ -84,8 +83,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
-      <body className="font-poppins antialiased">{children}</body>
+    <html lang="en" className={`${lexend.variable} ${inter.variable}`}>
+      <body className="font-lexend antialiased">{children}</body>
     </html>
   );
 }

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import ChatIcon from "../ui/icons/chatIcon";
 
 export function HeroSection() {
   return (
@@ -8,14 +8,15 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center overflow-hidden"
       aria-label="Hero — Design & Delivery of Your Villa Interiors"
     >
-      {/* Background image */}
-      <Image
-        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1800&auto=format&fit=crop&q=80"
-        alt="Luxury villa interior with dark leather sofas and ambient lighting"
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
+      {/* Background video */}
+      <video
+        src="/images/home-bg.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+        aria-hidden="true"
       />
 
       {/* Gradient overlay */}
@@ -26,22 +27,29 @@ export function HeroSection() {
 
       {/* Content card */}
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="glass-card max-w-xl rounded-2xl px-8 py-10 sm:px-10 sm:py-12">
-          <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-[3.25rem]">
+        <div className="glass-card max-w-[632px] rounded-lg px-8 py-10 sm:px-10 sm:py-12">
+          <h1
+            className="text-3xl font-bold text-white sm:text-4xl lg:text-[3rem]"
+            style={{ lineHeight: "120%" }}
+          >
             Design &amp; Delivery of Your Villa Interiors
             <br />
-            <em className="not-italic text-brand-teal">Made Simple</em>
+            <em className="not-italic text-brand-teal" style={{ lineHeight: "135%" }}>
+              Made Simple
+            </em>
           </h1>
-          <p className="mt-4 text-sm leading-relaxed text-gray-300 sm:text-base">
-            Kitchens, closets, doors, and premium uPVC windows designed, manufactured, and
-            installed by one trusted Emirati factory.
+          <p className="mt-4 font-inter text-lg leading-relaxed text-white">
+            Kitchens, closets, doors, and premium uPVC windows designed, manufactured, and installed
+            by one trusted Emirati factory.
           </p>
           <div className="mt-8">
             <Button
               variant="primary"
               size="lg"
               withArrow
+              radius="rounded-lg"
               aria-label="Get your free 3D design consultation"
+              className="px-4 py-2 font-inter text-lg font-bold"
             >
               Get Your FREE 3D Design Now
             </Button>
@@ -50,12 +58,14 @@ export function HeroSection() {
       </div>
 
       {/* Floating support button */}
+
       <a
         href="#contact"
         aria-label="Chat with our support team"
-        className="fixed bottom-8 right-6 z-20 flex h-16 w-16 items-center justify-center rounded-full bg-brand-teal shadow-lg shadow-brand-teal/30 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-teal"
+        className="fixed bottom-8 right-6 z-20 flex h-16 w-16 items-center justify-center rounded-full"
       >
-        <Headphones className="h-7 w-7 text-black" />
+        <span className="absolute h-16 w-16 animate-ping rounded-full bg-primary/40" />
+        <ChatIcon />
       </a>
     </section>
   );

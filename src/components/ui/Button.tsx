@@ -9,6 +9,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
   withArrow?: boolean;
+  radius?: string;
   children: React.ReactNode;
 };
 
@@ -33,6 +34,7 @@ export function Button({
   variant = "primary",
   size = "md",
   withArrow = false,
+  radius = "rounded-full",
   children,
   className,
   ...props
@@ -40,7 +42,8 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex items-center gap-2 font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50",
+        radius,
         variantClasses[variant],
         sizeClasses[size],
         className

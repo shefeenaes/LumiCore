@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --font-poppins: "Poppins", sans-serif;
+  --font-lexend: "Lexend", sans-serif;
   --font-inter: "Inter", sans-serif;
-  --color-teal: #4ecdc4;
-  --color-teal-dark: #3ab5ac;
+  --color-primary: #57b7c0;
+  --color-secondary: #ffffff;
+  --color-teal: #57b7c0;
+  --color-teal-dark: #3d9ea7;
   --color-dark: #1a1a1a;
   --color-dark-card: #252525;
 }
@@ -29,7 +31,7 @@
   body {
     background-color: #1a1a1a;
     color: #ffffff;
-    font-family: var(--font-poppins), sans-serif;
+    font-family: var(--font-lexend), sans-serif;
     overflow-x: hidden;
   }
 
@@ -94,7 +96,7 @@
     background: #1a1a1a;
   }
   ::-webkit-scrollbar-thumb {
-    background: #4ecdc4;
+    background: #57b7c0;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
