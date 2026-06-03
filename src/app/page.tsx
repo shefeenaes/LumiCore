@@ -2,7 +2,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { InteriorSolutionsReveal } from "@/components/sections/InteriorSolutionsReveal";
-import { SolutionsSection } from "@/components/sections/SolutionsSection";
 import { ProblemSection } from "@/components/sections/ProblemSection";
 import { ApproachSection } from "@/components/sections/ApproachSection";
 import { DesignCTASection } from "@/components/sections/DesignCTASection";
@@ -18,7 +17,6 @@ export default function HomePage() {
       <main id="main-content">
         <HeroSection />
         <InteriorSolutionsReveal />
-        <SolutionsSection />
         <ProblemSection />
         <ApproachSection />
         <DesignCTASection />

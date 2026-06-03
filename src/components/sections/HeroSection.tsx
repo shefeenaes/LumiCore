@@ -1,4 +1,3 @@
-import { Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import ChatIcon from "../ui/icons/chatIcon";
 
@@ -64,7 +63,7 @@ export function HeroSection() {
         aria-label="Chat with our support team"
         className="fixed bottom-8 right-6 z-20 flex h-16 w-16 items-center justify-center rounded-full"
       >
-        <span className="absolute h-16 w-16 animate-ping rounded-full bg-primary/40" />
+        <span className="bg-primary/40 absolute h-16 w-16 animate-ping rounded-full" />
         <ChatIcon />
       </a>
     </section>

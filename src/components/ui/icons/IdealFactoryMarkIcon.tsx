@@ -7,8 +7,8 @@ interface IdealFactoryMarkIconProps {
 }
 
 export default function IdealFactoryMarkIcon({
-  width = 30,
-  height = 30,
+  width = 40,
+  height = 40,
   primaryColor = "#57B7C0",
   secondaryColor = "#ffffff",
   className,
@@ -22,9 +22,12 @@ export default function IdealFactoryMarkIcon({
       aria-hidden="true"
       className={className}
     >
-      <rect x="2" y="5" width="9" height="30" rx="2" fill={primaryColor} />
-      <rect x="15.5" y="12" width="9" height="23" rx="2" fill={primaryColor} />
-      <rect x="29" y="2" width="9" height="36" rx="2" fill={secondaryColor} opacity="0.9" />
+      {/* Left bar */}
+      <rect x="2" y="10" width="9" height="28" rx="2" fill={primaryColor} />
+      {/* Middle bar */}
+      <rect x="15.5" y="5" width="9" height="33" rx="2" fill={primaryColor} />
+      {/* Right bar — tallest */}
+      <rect x="29" y="2" width="9" height="36" rx="2" fill={secondaryColor} />
     </svg>
   );
 }
