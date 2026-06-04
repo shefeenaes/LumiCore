@@ -29,11 +29,27 @@ export function PortfolioSection() {
 
   return (
     <section
-      className="bg-[#111] px-4 py-20 sm:px-6 lg:px-8"
+      className="relative overflow-hidden bg-[#231F20] px-4 py-20 sm:px-6 lg:px-8"
       id="projects"
       aria-label="Portfolio — Designed. Built. Delivered."
     >
-      <div className="mx-auto max-w-5xl">
+      {/* Decorative top-left background — masked & tinted to primary color */}
+      <div
+        className="bg-primary pointer-events-none absolute left-0 top-0 z-0 h-[280px] w-[200px] sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
+        style={{
+          WebkitMaskImage: "url('/images/portfolio/section-bg.png')",
+          maskImage: "url('/images/portfolio/section-bg.png')",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "left top",
+          maskPosition: "left top",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
         {/* Heading */}
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">Designed. Built. Delivered</h2>
@@ -54,7 +70,7 @@ export function PortfolioSection() {
               className={cn(
                 "rounded-full border px-5 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal",
                 active === cat.id
-                  ? "border-brand-teal bg-brand-teal text-black"
+                  ? "border-primary bg-primary text-black"
                   : "border-white/20 bg-transparent text-white hover:border-white/50"
               )}
             >
@@ -64,7 +80,7 @@ export function PortfolioSection() {
         </div>
 
         {/* Portfolio grid */}
-        <div className="grid auto-rows-[220px] grid-cols-2 gap-3 sm:auto-rows-[260px] sm:grid-cols-3">
+        <div className="grid auto-rows-[150px] grid-cols-2 gap-4 sm:auto-rows-[316px] sm:grid-cols-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((item) => (
               <PortfolioTile key={item.id} item={item} />
@@ -74,9 +90,7 @@ export function PortfolioSection() {
 
         {/* CTA */}
         <div className="mt-12 flex justify-center">
-          <Button variant="teal" size="lg">
-            Explore Projects
-          </Button>
+          <Button withArrow>Explore Projects</Button>
         </div>
       </div>
     </section>
@@ -85,6 +99,7 @@ export function PortfolioSection() {
 
 function PortfolioTile({ item }: { item: PortfolioItem }) {
   const spanClass = {
+    feature: "col-span-2 row-span-2",
     tall: "row-span-2",
     wide: "col-span-2",
     normal: "",
@@ -106,7 +121,10 @@ function PortfolioTile({ item }: { item: PortfolioItem }) {
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
       />
-      <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20"
+        aria-hidden="true"
+      />
     </motion.div>
   );
 }

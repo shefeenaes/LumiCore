@@ -5,7 +5,8 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { navItems } from "@/data/navigation";
-import PhoneIcon from "../ui/icons/phoneIcon";
+import PhoneIcon from "../ui/icons/PhoneIcon";
+import { Button } from "@/components/ui/Button";
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -53,7 +54,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
               <div className="flex flex-1 justify-center">
                 <Image
-                  src="/images/logo-home.png"
+                  src="/images/brand/logo.png"
                   alt="Ideal Factory"
                   width={155}
                   height={60}
@@ -81,14 +82,14 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
               {/* CTA */}
               <div className="p-3">
-                <Link
+                <Button
                   href="#contact"
                   onClick={onClose}
-                  className="bg-primary mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-[#062f34]"
+                  className="mt-2 w-full text-sm"
                 >
-                  <PhoneIcon className="h-5 w-5 shrink-0" color="#062f34" />
+                  <PhoneIcon className="h-5 w-5 shrink-0" />
                   Start Your Project
-                </Link>
+                </Button>
               </div>
             </div>
           </motion.div>

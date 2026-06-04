@@ -1,55 +1,29 @@
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 
-type ButtonVariant = "primary" | "outline" | "ghost" | "teal";
-type ButtonSize = "sm" | "md" | "lg";
+const BASE_CLASSES =
+  "inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 font-inter text-base font-medium text-white transition-all duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
+type CommonProps = {
+  /** Show the trailing arrow-in-circle icon */
   withArrow?: boolean;
-  radius?: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    "bg-white text-black hover:bg-gray-100 border border-white/20",
-  outline:
-    "bg-transparent text-white border border-white/50 hover:border-white hover:bg-white/10",
-  ghost:
-    "bg-transparent text-white hover:bg-white/10",
-  teal:
-    "bg-brand-teal text-black font-semibold hover:bg-brand-teal-dark border border-brand-teal",
-};
+// When `href` is provided the component renders an <a>, otherwise a <button>.
+type ButtonAsButton = CommonProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof CommonProps> & { href?: undefined };
 
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-sm",
-  md: "px-6 py-3 text-sm",
-  lg: "px-8 py-4 text-base",
-};
+type ButtonAsLink = CommonProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof CommonProps> & { href: string };
 
-export function Button({
-  variant = "primary",
-  size = "md",
-  withArrow = false,
-  radius = "rounded-full",
-  children,
-  className,
-  ...props
-}: ButtonProps) {
+type ButtonProps = ButtonAsButton | ButtonAsLink;
+
+function Content({ withArrow, children }: Pick<CommonProps, "withArrow" | "children">) {
   return (
-    <button
-      className={cn(
-        "inline-flex items-center gap-2 font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50",
-        radius,
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
-      {...props}
-    >
+    <>
       {children}
       {withArrow && (
         <span
@@ -59,6 +33,24 @@ export function Button({
           <ArrowRight className="h-3.5 w-3.5" />
         </span>
       )}
+    </>
+  );
+}
+
+export function Button({ withArrow = false, children, className, ...props }: ButtonProps) {
+  if (typeof props.href === "string") {
+    const anchorProps = props as AnchorHTMLAttributes<HTMLAnchorElement>;
+    return (
+      <a className={cn(BASE_CLASSES, className)} {...anchorProps}>
+        <Content withArrow={withArrow}>{children}</Content>
+      </a>
+    );
+  }
+
+  const buttonProps = props as ButtonHTMLAttributes<HTMLButtonElement>;
+  return (
+    <button className={cn(BASE_CLASSES, className)} {...buttonProps}>
+      <Content withArrow={withArrow}>{children}</Content>
     </button>
   );
 }

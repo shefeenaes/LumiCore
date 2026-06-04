@@ -7,7 +7,8 @@ import { motion } from "framer-motion";
 import { navItems } from "@/data/navigation";
 import { MobileMenu } from "./MobileMenu";
 import Image from "next/image";
-import PhoneIcon from "../ui/icons/phoneIcon";
+import PhoneIcon from "../ui/icons/PhoneIcon";
+import { Button } from "@/components/ui/Button";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -54,7 +55,7 @@ export function Header() {
             aria-label="Ideal Factory – Home"
           >
             <Image
-              src="/images/logo-home.png"
+              src="/images/brand/logo.png"
               alt="Ideal Factory logo"
               width={155}
               height={60}
@@ -64,13 +65,10 @@ export function Header() {
 
           {/* Right: CTA */}
           <div className="flex items-center gap-3">
-            <Link
-              href="#contact"
-              className="bg-primary shadow-primary-20 hover:bg-primary-hover hidden items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition sm:inline-flex"
-            >
+            <Button href="#contact" className="hidden text-sm sm:inline-flex">
               <PhoneIcon className="h-5 w-5 shrink-0" />
               Start Your Project
-            </Link>
+            </Button>
           </div>
         </nav>
       </motion.header>

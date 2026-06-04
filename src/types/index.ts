@@ -3,12 +3,19 @@ export type NavItem = {
   href: string;
 };
 
+export type IconComponent = React.ComponentType<{
+  width?: number | string;
+  height?: number | string;
+  color?: string;
+  className?: string;
+}>;
+
 export type Service = {
   id: string;
   title: string;
   description: string;
   image: string;
-  icon: string;
+  icon: IconComponent;
   category: PortfolioCategory;
 };
 
@@ -19,7 +26,7 @@ export type PortfolioItem = {
   src: string;
   alt: string;
   category: PortfolioCategory;
-  span?: "tall" | "wide" | "normal";
+  span?: "feature" | "tall" | "wide" | "normal";
 };
 
 export type Testimonial = {

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Testimonial } from "@/types";
+import QuoteIcon from "@/components/ui/icons/QuoteIcon";
 
 type TestimonialCardProps = {
   testimonial: Testimonial;
@@ -7,14 +8,12 @@ type TestimonialCardProps = {
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-brand-dark-card p-6">
+    <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-brand-dark-card p-6 shadow-[0_0_12px_0_#4D4A4A]">
       {/* Quote mark */}
-      <div aria-hidden="true" className="mb-4 text-5xl font-bold leading-none text-brand-teal">
-        &#10077;&#10077;
-      </div>
+      <QuoteIcon />
 
       {/* Quote */}
-      <p className="flex-1 text-sm leading-relaxed text-gray-300">{testimonial.quote}</p>
+      <p className="flex-1 text-sm leading-relaxed text-[#797777]">{testimonial.quote}</p>
 
       {/* Author */}
       <div className="mt-6 flex items-center gap-3">
@@ -27,7 +26,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
         />
         <div>
           <p className="font-semibold text-brand-teal">{testimonial.name}</p>
-          <p className="text-xs text-gray-400">{testimonial.role}</p>
+          <p className="text-xs text-white">{testimonial.role}</p>
         </div>
       </div>
     </article>

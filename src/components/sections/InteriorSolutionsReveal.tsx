@@ -2,13 +2,11 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import IdealFactoryMarkIcon from "@/components/ui/icons/IdealFactoryMarkIcon";
 import { services } from "@/data/services";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { Button } from "@/components/ui/Button";
-import IdealFactoryMarkIcon from "@/components/ui/icons/IdealFactoryMarkIcon";
 
-// fontSize drives the zoom (NOT scale) — background-attachment:fixed breaks
-// inside CSS transform contexts, so we animate layout size instead.
 const BASE: React.CSSProperties = {
   display: "block",
   fontFamily: "var(--font-lexend), sans-serif",
@@ -28,253 +26,158 @@ export function InteriorSolutionsReveal() {
     offset: ["start start", "end end"],
   });
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // PHASE 1 — Text mask zoom (0.00 → 0.58)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // ── PHASE 1: Text mask zoom (0.00 → 0.50) ───────────────────────
+  const fontSize       = useTransform(scrollYProgress, [0.04, 0.46], ["160px", "1000px"]);
+  const outlineOpacity = useTransform(scrollYProgress, [0.0, 0.04, 0.14], [1, 1, 0]);
+  const fillOpacity    = useTransform(scrollYProgress, [0.04, 0.16, 0.42, 0.50], [0, 1, 1, 0]);
+  // Villa bg fades in mid-zoom so letter blend is seamless
+  const villaBgOpacity = useTransform(scrollYProgress, [0.32, 0.46], [0, 1]);
 
-  const fontSize = useTransform(
-    scrollYProgress,
-    [0.04, 0.52],
-    ["160px", "1000px"],
-  );
-
-  // Outlined rest state: visible at start, fades as image fill begins
-  const outlineOpacity = useTransform(
-    scrollYProgress,
-    [0.0, 0.04, 0.14],
-    [1, 1, 0],
-  );
-
-  // Image-filled text: fades in → holds at peak → fades out as bg becomes full
-  const fillOpacity = useTransform(
-    scrollYProgress,
-    [0.04, 0.16, 0.50, 0.58],
-    [0, 1, 1, 0],
-  );
-
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // SHARED LAYER — bg-2-image.jpg container (full screen → oval → full screen)
+  // ── PHASE 2: Content appears instantly, then oval closes in (0.48 → 0.72) ─
   //
-  // This single div serves Phase 1 AND the oval animation:
-  //   • Phase 1 peak: full screen (insets=0%), fades in mid-zoom so outside
-  //     the letters also shows the villa image → seamless text-fade blend.
-  //   • Transition: insets animate to 8%/4% + radius 50% → oval forms.
-  //   • Phase 3: insets back to 0% → oval expands to fill screen again.
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // Sequence:
+  //   1. Villa bg reaches full opacity → content is immediately visible (no fade-in)
+  //   2. Backdrop-blur overlay fades in from the outer EDGES of the screen
+  //   3. The transparent oval hole starts HUGE (almost full-screen) so the blur
+  //      is barely a ring at the edges, then CONTRACTS to standard oval size —
+  //      this is the "closing in from outside" effect
+  //   4. Oval stabilises, framing the content
+  //
+  // Content opacity: near-instant (0.47 → 0.50) so it feels "already there"
+  const contentOpacity = useTransform(scrollYProgress, [0.47, 0.51], [0, 1]);
 
-  const villaBgOpacity = useTransform(scrollYProgress, [0.38, 0.52], [0, 1]);
+  // Blur overlay fades in as the oval closes
+  const blurLayerOpacity = useTransform(scrollYProgress, [0.50, 0.60], [0, 1]);
 
-  // top / bottom inset (8% at oval peak)
-  const ovalTB = useTransform(
-    scrollYProgress,
-    [0.56, 0.66, 0.80, 0.87],
-    ["0%", "8%", "8%", "0%"],
-  );
-  // left / right inset (4% at oval peak — wider oval)
-  const ovalLR = useTransform(
-    scrollYProgress,
-    [0.56, 0.66, 0.80, 0.87],
-    ["0%", "4%", "4%", "0%"],
-  );
-  const ovalRadius = useTransform(
-    scrollYProgress,
-    [0.56, 0.66, 0.80, 0.87],
-    ["0%", "50%", "50%", "0%"],
-  );
-
-  // Dark scrim on the oval image — makes hero text legible while framed
-  const ovalOverlay = useTransform(
-    scrollYProgress,
-    [0.56, 0.66, 0.80, 0.87],
-    [0, 0.45, 0.45, 0],
+  // Oval mask: the TRANSPARENT hole starts huge (200% × 180%) and contracts
+  // to the standard framing oval (92% × 84%).  Everything OUTSIDE the hole
+  // gets the blur+tint treatment.
+  const ovalMask = useTransform(scrollYProgress,
+    [0.52, 0.72, 1.0],
+    [
+      "radial-gradient(ellipse 200% 180% at 50% 50%, transparent 98%, black 100%)",
+      "radial-gradient(ellipse  92%  84% at 50% 50%, transparent 98%, black 100%)",
+      "radial-gradient(ellipse  92%  84% at 50% 50%, transparent 98%, black 100%)",
+    ]
   );
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // PHASE 2 — "Our Solutions" hero card (0.68 → 0.84)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  const heroOpacity = useTransform(
-    scrollYProgress,
-    [0.68, 0.74, 0.78, 0.84],
-    [0, 1, 1, 0],
-  );
-  const heroY = useTransform(
-    scrollYProgress,
-    [0.68, 0.74, 0.78, 0.84],
-    [30, 0, 0, -40],
-  );
-
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // PHASE 3 — Services grid (0.87 → 0.94)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  const gridOpacity = useTransform(scrollYProgress, [0.87, 0.94], [0, 1]);
-  const gridY = useTransform(scrollYProgress, [0.87, 0.94], [60, 0]);
+  // ── PHASE 3: Content scrolls up through the oval window (0.76 → 1.0) ─
+  // The oval stays fixed. The heading+grid block moves upward:
+  // heading exits through the top of the oval, grid cards come into view.
+  // No additional fade — the block is already fully visible.
+  const contentY = useTransform(scrollYProgress, [0.76, 1.0], ["0vh", "-75vh"]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative h-[700vh]"
+      className="relative h-[1200vh]"
       aria-label="Our Interior Solutions and Services"
       id="services"
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      {/* clipPath clips visually without creating a scroll container */}
+      <div
+        className="sticky top-0 h-screen"
+        style={{ clipPath: "inset(0)" }}
+      >
 
-        {/* ── Layer 0: Dark marble base — always visible ── */}
+        {/* Layer 0: Marble base (Phase 1 background) */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/bg-2.jpg')" }}
+          style={{ backgroundImage: "url('/images/interior/marble-bg.jpg')" }}
           aria-hidden="true"
         />
 
-        {/* ── Layer 1: Villa bg — full screen during text peak, contracts to oval,
-            then expands back. One div drives both the blend AND the oval reveal. ── */}
+        {/* Layer 1: Villa image — full screen, always */}
         <motion.div
-          style={{
-            opacity: villaBgOpacity,
-            position: "absolute",
-            top: ovalTB,
-            bottom: ovalTB,
-            left: ovalLR,
-            right: ovalLR,
-            borderRadius: ovalRadius,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/bg-2-image.jpg')" }}
-            aria-hidden="true"
-          />
-          {/* Scrim: darkens image when framed so text is readable */}
-          <motion.div
-            style={{ opacity: ovalOverlay }}
-            className="absolute inset-0 bg-black"
-            aria-hidden="true"
-          />
-        </motion.div>
+          style={{ opacity: villaBgOpacity, backgroundImage: "url('/images/interior/villa-reveal.jpg')" }}
+          className="absolute inset-0 bg-cover bg-center"
+          aria-hidden="true"
+        />
 
-        {/* ── Layer 2: Outlined text (rest state) ── */}
+        {/* Layer 2: Outlined text (Phase 1 rest state) */}
         <motion.div
           style={{ opacity: outlineOpacity }}
           className="absolute inset-0 flex flex-col items-center justify-center"
           aria-hidden="true"
         >
           {WORDS.map((w) => (
-            <motion.span
-              key={w}
-              style={{
-                ...BASE,
-                fontSize,
-                WebkitTextStroke: "3px white",
-                color: "transparent",
-              }}
-            >
+            <motion.span key={w} style={{ ...BASE, fontSize, WebkitTextStroke: "3px white", color: "transparent" }}>
               {w}
             </motion.span>
           ))}
         </motion.div>
 
-        {/* ── Layer 3: Image-masked growing text ──
-            Two sublayers rendered at the same position/size:
-            A) dark fill + white stroke (paint-order: stroke fill) — the stroke
-               is painted first, then the dark fill covers the inward half, leaving
-               only the outer ring. Eliminates crooked-edge artefacts on R / E / N.
-            B) transparent text + background-clip:text + background-attachment:fixed
-               — villa image is pinned to the viewport and revealed only through the
-               letterforms. As font grows, more of the image shows through.          ── */}
+        {/* Layer 3: Image-masked growing text (Phase 1) */}
         <motion.div style={{ opacity: fillOpacity }} className="absolute inset-0">
-
-          {/* Sublayer A: clean outer stroke, dark fill */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
-          >
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             {WORDS.map((w) => (
-              <motion.span
-                key={w}
-                style={{
-                  ...BASE,
-                  fontSize,
-                  WebkitTextStroke: "4px white",
-                  color: "#0d0d0d",
-                  paintOrder: "stroke fill",
-                }}
-              >
+              <motion.span key={w} style={{ ...BASE, fontSize, WebkitTextStroke: "4px white", color: "#0d0d0d", paintOrder: "stroke fill" }}>
                 {w}
               </motion.span>
             ))}
           </div>
-
-          {/* Sublayer B: villa image clipped to letterforms */}
           <div
             className="absolute inset-0 flex flex-col items-center justify-center"
-            style={{
-              backgroundImage: "url('/images/bg-2-image.jpg')",
-              backgroundSize: "cover",
-              backgroundAttachment: "fixed",
-              backgroundPosition: "center",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
+            style={{ backgroundImage: "url('/images/interior/villa-reveal.jpg')", backgroundSize: "cover", backgroundAttachment: "fixed", backgroundPosition: "center", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}
           >
             {WORDS.map((w) => (
-              <motion.span key={w} style={{ ...BASE, fontSize }}>
-                {w}
-              </motion.span>
+              <motion.span key={w} style={{ ...BASE, fontSize }}>{w}</motion.span>
             ))}
           </div>
         </motion.div>
 
-        {/* ── Layer 4: "Our Solutions" hero card — shown while oval is stable ── */}
+        {/* Layer 4: Heading + grid — appears instantly as villa bg reaches full opacity.
+            The oval (Layer 5) then closes in around this content from the outside.
+            contentY drives the scroll-up: heading exits top, grid reveals below. */}
         <motion.div
-          style={{ opacity: heroOpacity, y: heroY }}
-          className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center"
+          style={{ opacity: contentOpacity, y: contentY, top: "10vh" }}
+          className="absolute left-0 right-0"
         >
-          <IdealFactoryMarkIcon
-            width={80}
-            height={80}
-            primaryColor="#ffffff"
-            secondaryColor="#ffffff"
-          />
-          <h2 className="mt-5 text-4xl font-bold text-white lg:text-5xl">
-            Our Solutions
-          </h2>
-          <p className="mt-3 text-lg font-medium text-white">
-            We provide all types of integrated
-          </p>
-          <p className="mt-1 text-lg font-semibold" style={{ color: "#57B7C0" }}>
-            KITCHEN, CLOSET, DOOR Services
-          </p>
-        </motion.div>
+          <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
 
-        {/* ── Layer 5: Services grid — fades in after oval expands to full screen ── */}
-        <motion.div
-          style={{ opacity: gridOpacity, y: gridY }}
-          className="absolute inset-0 overflow-y-auto"
-        >
-          <div className="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">
-            <div className="mb-10 text-center">
-              <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            <div className="mb-10 pt-4 text-center">
+              <IdealFactoryMarkIcon
+                width={72}
+                height={72}
+                primaryColor="#ffffff"
+                secondaryColor="#ffffff"
+              />
+              <h2 className="mt-4 text-4xl font-bold text-white lg:text-5xl">
                 Our Solutions
               </h2>
-              <p className="mt-2 text-gray-300">We provide all type of modular</p>
-              <p className="font-semibold" style={{ color: "#57B7C0" }}>
+              <p className="mt-2 text-lg font-medium text-white">
+                We provide all types of integrated
+              </p>
+              <p className="mt-1 text-lg font-semibold" style={{ color: "#57B7C0" }}>
                 KITCHEN, CLOSET, DOOR Services
               </p>
             </div>
+
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {services.map((service, i) => (
                 <ServiceCard key={service.id} service={service} index={i} />
               ))}
             </div>
-            <div className="mt-12 flex justify-center">
-              <Button variant="teal" size="lg" withArrow>
-                Explore Our Projects
-              </Button>
+
+            <div className="mt-10 flex justify-center">
+              <Button withArrow>Explore Our Projects</Button>
             </div>
+
           </div>
+        </motion.div>
+
+        {/* Layer 5: Backdrop-blur oval — fades in AFTER content is visible,
+            starts as a huge transparent hole (barely a blur ring at edges),
+            contracts to standard oval, framing the content below.         */}
+        <motion.div
+          style={{ opacity: blurLayerOpacity, maskImage: ovalMask, WebkitMaskImage: ovalMask }}
+          className="absolute inset-0"
+          aria-hidden="true"
+        >
+          <div
+            className="absolute inset-0"
+            style={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", backgroundColor: "rgba(35,31,32,0.72)" }}
+          />
         </motion.div>
 
       </div>

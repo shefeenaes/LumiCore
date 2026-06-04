@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import DecorativeIcon from "@/components/ui/icons/DecorativeIcon";
 
 type FormState = {
   name: string;
@@ -48,26 +49,21 @@ export function ContactSection() {
 
   return (
     <section
-      className="relative overflow-hidden bg-[#0d0d0d] px-4 py-20 sm:px-6 lg:px-8"
+      className="relative overflow-hidden bg-[linear-gradient(to_right,#231F20,#000000)] px-4 py-20 sm:px-6 lg:px-8"
       id="contact"
       aria-label="Contact us"
     >
-      {/* Geometric lines decoration */}
-      <div className="pointer-events-none absolute inset-0 opacity-10" aria-hidden="true">
-        <svg className="absolute left-0 top-0 h-full w-64" viewBox="0 0 200 600" fill="none">
-          <line x1="20" y1="50" x2="180" y2="300" stroke="white" strokeWidth="0.5" />
-          <line x1="20" y1="100" x2="150" y2="400" stroke="white" strokeWidth="0.5" />
-          <line x1="50" y1="20" x2="200" y2="250" stroke="white" strokeWidth="0.5" />
-          <polygon points="60,150 120,80 140,200" stroke="white" strokeWidth="0.5" fill="none" />
-        </svg>
-        <svg className="absolute right-0 top-0 h-full w-64" viewBox="0 0 200 600" fill="none">
-          <line x1="180" y1="50" x2="20" y2="300" stroke="white" strokeWidth="0.5" />
-          <line x1="180" y1="100" x2="50" y2="400" stroke="white" strokeWidth="0.5" />
-          <polygon points="140,150 80,80 60,200" stroke="white" strokeWidth="0.5" fill="none" />
-        </svg>
-      </div>
+      {/* Corner decorations — decorativeIcon tucked into opposite corners */}
+      <DecorativeIcon
+        className="pointer-events-none absolute right-0 top-0 rotate-180 opacity-60"
+        aria-hidden="true"
+      />
+      <DecorativeIcon
+        className="pointer-events-none absolute bottom-0 left-0 opacity-60"
+        aria-hidden="true"
+      />
 
-      <div className="relative mx-auto max-w-5xl">
+      <div className="relative z-10 mx-auto max-w-5xl">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           {/* Left */}
           <motion.div
@@ -150,8 +146,8 @@ export function ContactSection() {
                       aria-invalid={!!errors.message}
                       aria-describedby={errors.message ? "message-error" : undefined}
                       className={cn(
-                        "w-full resize-none rounded-xl border bg-transparent px-4 py-3 text-sm text-white placeholder-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-teal",
-                        errors.message ? "border-red-500" : "border-white/20 hover:border-white/40"
+                        "w-full resize-none rounded-lg bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-teal",
+                        errors.message ? "ring-2 ring-red-500" : ""
                       )}
                     />
                     {errors.message && (
@@ -160,7 +156,7 @@ export function ContactSection() {
                       </p>
                     )}
                   </div>
-                  <Button type="submit" variant="teal" size="lg" className="w-full justify-center rounded-xl">
+                  <Button type="submit" className="px-12">
                     Submit
                   </Button>
                 </form>
@@ -201,8 +197,8 @@ function Field({ label, id, name, type = "text", value, onChange, error, require
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={cn(
-          "w-full rounded-xl border bg-transparent px-4 py-3 text-sm text-white placeholder-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-teal",
-          error ? "border-red-500" : "border-white/20 hover:border-white/40"
+          "w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-teal",
+          error && "ring-2 ring-red-500"
         )}
       />
       {error && (

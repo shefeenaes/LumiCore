@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import ChatIcon from "../ui/icons/chatIcon";
+import ChatIcon from "../ui/icons/ChatIcon";
 
 export function HeroSection() {
   return (
@@ -9,7 +9,7 @@ export function HeroSection() {
     >
       {/* Background video */}
       <video
-        src="/images/home-bg.mp4"
+        src="/images/hero/bg-video.mp4"
         autoPlay
         loop
         muted
@@ -43,12 +43,9 @@ export function HeroSection() {
           </p>
           <div className="mt-8">
             <Button
-              variant="primary"
-              size="lg"
               withArrow
-              radius="rounded-lg"
               aria-label="Get your free 3D design consultation"
-              className="px-4 py-2 font-inter text-lg font-bold"
+              className="text-lg font-bold"
             >
               Get Your FREE 3D Design Now
             </Button>

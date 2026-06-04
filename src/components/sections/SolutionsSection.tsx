@@ -46,7 +46,7 @@ export function SolutionsSection() {
         {/* Dark marble base — visible outside the oval */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/bg-2.jpg')" }}
+          style={{ backgroundImage: "url('/images/interior/marble-bg.jpg')" }}
           aria-hidden="true"
         />
 
@@ -65,7 +65,7 @@ export function SolutionsSection() {
           {/* bg-2-image.jpg fills the oval */}
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/bg-2-image.jpg')" }}
+            style={{ backgroundImage: "url('/images/interior/villa-reveal.jpg')" }}
             aria-hidden="true"
           />
           {/* Transparent dark overlay on the image */}
@@ -121,9 +121,7 @@ export function SolutionsSection() {
             </div>
 
             <div className="mt-12 flex justify-center">
-              <Button variant="teal" size="lg" withArrow>
-                Explore Our Projects
-              </Button>
+              <Button withArrow>Explore Our Projects</Button>
             </div>
           </div>
         </motion.div>

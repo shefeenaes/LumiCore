@@ -1,20 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { testimonials } from "@/data/testimonials";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
+import ArrowCircleIcon from "@/components/ui/icons/ArrowCircleIcon";
+
+const PER_PAGE = 2;
 
 export function TestimonialsSection() {
   const [page, setPage] = useState(0);
-  const perPage = 2;
-  const totalPages = Math.ceil(testimonials.length / perPage);
 
-  const visible = testimonials.slice(page * perPage, page * perPage + perPage);
+  // Group testimonials into pages of PER_PAGE
+  const pages = useMemo(() => {
+    const out: (typeof testimonials)[] = [];
+    for (let i = 0; i < testimonials.length; i += PER_PAGE) {
+      out.push(testimonials.slice(i, i + PER_PAGE));
+    }
+    return out;
+  }, []);
 
-  const prev = () => setPage((p) => Math.max(0, p - 1));
-  const next = () => setPage((p) => Math.min(totalPages - 1, p + 1));
+  const totalPages = pages.length;
+
+  // Wrap around: past the end → back to first; before the start → last
+  const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
+  const next = () => setPage((p) => (p + 1) % totalPages);
 
   return (
     <section
@@ -32,43 +42,57 @@ export function TestimonialsSection() {
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               What They&apos;re Talking About Company ?
             </h2>
+            <p className="mt-4 text-sm leading-relaxed text-white/70">
+              Real villa owners across the UAE have trusted Ideal Factory for kitchens, closets,
+              doors and uPVC window systems.
+            </p>
 
             {/* Navigation */}
             <div className="mt-6 flex gap-3" role="group" aria-label="Testimonial navigation">
+              {/* Prev — inactive style (outline / transparent fill), icon mirrored */}
               <button
                 onClick={prev}
-                disabled={page === 0}
                 aria-label="Previous testimonials"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white transition-colors hover:border-white disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ArrowCircleIcon
+                  width={44}
+                  height={44}
+                  color="white"
+                  fill="transparent"
+                  className="-scale-x-100"
+                />
               </button>
+
+              {/* Next — active style (teal fill) */}
               <button
                 onClick={next}
-                disabled={page >= totalPages - 1}
                 aria-label="Next testimonials"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white transition-colors hover:border-white disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ArrowCircleIcon width={44} height={44} color="white" fill="#57B7C0" />
               </button>
             </div>
           </div>
 
-          {/* Right: testimonial cards */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-2">
-            <AnimatePresence mode="wait">
-              {visible.map((testimonial) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.35 }}
+          {/* Right: testimonial carousel (linear scroll track) */}
+          <div className="overflow-hidden lg:col-span-2">
+            <motion.div
+              className="flex"
+              animate={{ x: `-${page * 100}%` }}
+              transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+            >
+              {pages.map((group, i) => (
+                <div
+                  key={i}
+                  className="grid w-full shrink-0 grid-cols-1 gap-5 sm:grid-cols-2"
                 >
-                  <TestimonialCard testimonial={testimonial} />
-                </motion.div>
+                  {group.map((testimonial) => (
+                    <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+                  ))}
+                </div>
               ))}
-            </AnimatePresence>
+            </motion.div>
           </div>
         </div>
       </div>

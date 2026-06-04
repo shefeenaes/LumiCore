@@ -1,3 +1,7 @@
+import GridIcon from "@/components/ui/icons/GridIcon";
+import PaletteIcon from "@/components/ui/icons/PaletteIcon";
+import PlaySquareIcon from "@/components/ui/icons/PlaySquareIcon";
+
 export const SITE_NAME = "Ideal Factory";
 export const SITE_URL = "https://www.idealhomeuae.com";
 export const SITE_DESCRIPTION =
@@ -16,16 +20,19 @@ export const PROBLEM_POINTS = [
 ];
 
 export const WHY_CHOOSE_POINTS = [
-  { id: "one-factory", text: "One factory for kitchens, wardrobes, doors, and premium window systems." },
+  {
+    id: "one-factory",
+    text: "One factory for kitchens, wardrobes, doors, and premium window systems.",
+  },
   { id: "3d-design", text: "Fast 3D design before production" },
   { id: "precision", text: "Precision manufacturing with European machinery" },
   { id: "uae", text: "Solutions designed for UAE villas" },
 ];
 
 export const DESIGN_STEPS = [
-  { id: "floor-plan", icon: "grid", label: "Upload Floor Plan" },
-  { id: "3d-design", icon: "palette", label: "Get 3D Design" },
-  { id: "live-edit", icon: "play-square", label: "Live Design Edit" },
+  { id: "floor-plan", icon: GridIcon, label: "Upload Floor Plan" },
+  { id: "3d-design", icon: PaletteIcon, label: "Get 3D Design" },
+  { id: "live-edit", icon: PlaySquareIcon, label: "Live Design Edit" },
 ];
 
 export const DESIGN_BENEFITS = [

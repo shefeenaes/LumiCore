@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Globe, Mail, Phone } from "lucide-react";
 import { CONTACT_EMAIL, CONTACT_PHONE_1, CONTACT_PHONE_2, CONTACT_WEBSITE } from "@/constants";
 
@@ -20,20 +21,19 @@ const exploreLinks = [
 export function Footer() {
   return (
     <footer
-      className="relative overflow-hidden bg-[#0d0d0d]"
+      className="relative h-[449px] overflow-hidden"
       role="contentinfo"
       aria-label="Site footer"
     >
       {/* Background image with overlay */}
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-15"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&auto=format&fit=crop&q=60)",
+          backgroundImage: "url(/images/layout/footer-bg.jpg)",
         }}
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/50" aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-16 sm:px-6 lg:px-8">
         {/* Main grid */}
@@ -41,13 +41,15 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <FooterLogo />
-              <div className="leading-tight">
-                <p className="font-bold text-white">Ideal</p>
-                <p className="font-bold text-white">Factory</p>
-              </div>
+              <Image
+                src="/images/brand/logo.png"
+                alt="Ideal Factory logo"
+                width={167}
+                height={64}
+                className="h-14 w-auto object-contain brightness-0 invert"
+              />
             </div>
-            <p className="text-sm leading-relaxed text-gray-400">
+            <p className="font-inter text-[13px] leading-relaxed text-white">
               Our kitchens may not be able to whisk you away to sun kissed foreign shores, but our
               collection boasts all the quality craftsmanship and style..
             </p>
@@ -55,13 +57,13 @@ export function Footer() {
 
           {/* Quick Links */}
           <nav aria-label="Quick links">
-            <h3 className="mb-4 font-semibold text-brand-teal">Quick Links</h3>
+            <h3 className="text-primary mb-4 font-inter text-2xl">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                    className="font-inter text-base font-normal text-white transition-colors focus-visible:underline focus-visible:outline-none"
                   >
                     {link.label}
                   </Link>
@@ -72,13 +74,13 @@ export function Footer() {
 
           {/* Explore */}
           <nav aria-label="Explore our services">
-            <h3 className="mb-4 font-semibold text-brand-teal">Explore</h3>
+            <h3 className="text-primary mb-4 font-inter text-2xl">Explore</h3>
             <ul className="space-y-2">
               {exploreLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                    className="font-inter text-base font-normal text-white transition-colors focus-visible:underline focus-visible:outline-none"
                   >
                     {link.label}
                   </Link>
@@ -89,34 +91,34 @@ export function Footer() {
 
           {/* Contact */}
           <address className="not-italic">
-            <h3 className="mb-4 font-semibold text-brand-teal">Contact</h3>
+            <h3 className="text-primary mb-4 font-inter text-2xl">Contact</h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href={`https://${CONTACT_WEBSITE}`}
-                  className="flex items-center gap-2 text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                  className="inline-flex items-center gap-2 font-inter text-base font-normal text-white transition-colors focus-visible:underline focus-visible:outline-none"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Globe className="h-4 w-4 shrink-0 text-brand-teal" />
+                  <Globe className="text-primary h-4 w-4 shrink-0" />
                   {CONTACT_WEBSITE}
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="flex items-center gap-2 text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                  className="inline-flex items-center gap-2 font-inter text-base font-normal text-white transition-colors focus-visible:underline focus-visible:outline-none"
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-brand-teal" />
+                  <Mail className="text-primary h-4 w-4 shrink-0" />
                   {CONTACT_EMAIL}
                 </a>
               </li>
               <li>
                 <a
                   href={`tel:${CONTACT_PHONE_1.replace(/[-\s]/g, "")}`}
-                  className="flex items-center gap-2 text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                  className="inline-flex items-start gap-2 font-inter text-base font-normal text-white transition-colors focus-visible:underline focus-visible:outline-none"
                 >
-                  <Phone className="h-4 w-4 shrink-0 text-brand-teal" />
+                  <Phone className="text-primary mt-1 h-4 w-4 shrink-0" />
                   <span>
                     {CONTACT_PHONE_1}
                     <br />
@@ -129,20 +131,20 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t-[1px] border-[#94CED4] pt-6 sm:flex-row">
           <p className="text-sm text-gray-400">
             Copyright &copy;{new Date().getFullYear()} lumicore all rights reserved
           </p>
           <div className="flex gap-6">
             <Link
               href="/terms"
-              className="text-sm text-gray-400 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+              className="text-sm text-gray-400 transition-colors hover:text-white focus-visible:underline focus-visible:outline-none"
             >
               Terms &amp; Condition
             </Link>
             <Link
               href="/privacy"
-              className="text-sm text-gray-400 transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+              className="text-sm text-gray-400 transition-colors hover:text-white focus-visible:underline focus-visible:outline-none"
             >
               Privacy Policy
             </Link>
@@ -150,15 +152,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
-}
-
-function FooterLogo() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <rect x="2" y="5" width="9" height="30" rx="2" fill="#4ECDC4" />
-      <rect x="15.5" y="12" width="9" height="23" rx="2" fill="#4ECDC4" />
-      <rect x="29" y="2" width="9" height="36" rx="2" fill="white" opacity="0.9" />
-    </svg>
   );
 }

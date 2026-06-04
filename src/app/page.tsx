@@ -3,8 +3,6 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { InteriorSolutionsReveal } from "@/components/sections/InteriorSolutionsReveal";
 import { ProblemSection } from "@/components/sections/ProblemSection";
-import { ApproachSection } from "@/components/sections/ApproachSection";
-import { DesignCTASection } from "@/components/sections/DesignCTASection";
 import { PortfolioSection } from "@/components/sections/PortfolioSection";
 import { WhyChooseSection } from "@/components/sections/WhyChooseSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -18,8 +16,7 @@ export default function HomePage() {
         <HeroSection />
         <InteriorSolutionsReveal />
         <ProblemSection />
-        <ApproachSection />
-        <DesignCTASection />
+
         <PortfolioSection />
         <WhyChooseSection />
         <TestimonialsSection />
