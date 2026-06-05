@@ -1,30 +1,64 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { testimonials } from "@/data/testimonials";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import ArrowCircleIcon from "@/components/ui/icons/ArrowCircleIcon";
 
-const PER_PAGE = 2;
+const ACTIVE_FILL = "#57B7C0";
+
+// Tracks whether a CSS media query currently matches (SSR-safe)
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia(query);
+    const update = () => setMatches(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, [query]);
+  return matches;
+}
 
 export function TestimonialsSection() {
   const [page, setPage] = useState(0);
+  // Which arrow was last clicked; null means none yet → Next stays active by default
+  const [active, setActive] = useState<"prev" | "next" | null>(null);
 
-  // Group testimonials into pages of PER_PAGE
+  // 1 card per page on mobile, 2 from the `sm` breakpoint (640px) up
+  const isSmUp = useMediaQuery("(min-width: 640px)");
+  const perPage = isSmUp ? 2 : 1;
+
+  // Group testimonials into pages of perPage
   const pages = useMemo(() => {
     const out: (typeof testimonials)[] = [];
-    for (let i = 0; i < testimonials.length; i += PER_PAGE) {
-      out.push(testimonials.slice(i, i + PER_PAGE));
+    for (let i = 0; i < testimonials.length; i += perPage) {
+      out.push(testimonials.slice(i, i + perPage));
     }
     return out;
-  }, []);
+  }, [perPage]);
 
   const totalPages = pages.length;
 
+  // When perPage changes the page count changes — keep the index in range
+  useEffect(() => {
+    setPage((p) => Math.min(p, totalPages - 1));
+  }, [totalPages]);
+
   // Wrap around: past the end → back to first; before the start → last
-  const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
-  const next = () => setPage((p) => (p + 1) % totalPages);
+  const prev = () => {
+    setActive("prev");
+    setPage((p) => (p - 1 + totalPages) % totalPages);
+  };
+  const next = () => {
+    setActive("next");
+    setPage((p) => (p + 1) % totalPages);
+  };
+
+  // Next is active by default (active === null); otherwise the last-clicked arrow is active
+  const prevFill = active === "prev" ? ACTIVE_FILL : "transparent";
+  const nextFill = active === "prev" ? "transparent" : ACTIVE_FILL;
 
   return (
     <section
@@ -32,20 +66,14 @@ export function TestimonialsSection() {
       id="testimonials"
       aria-label="Testimonials"
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl 2xl:max-w-7xl">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
           {/* Left: label + heading + nav */}
-          <div className="flex flex-col justify-center">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-teal">
-              Testimonials
-            </p>
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          <div className="flex flex-col justify-start">
+            <p className="mb-2 font-inter text-2xl tracking-widest text-primary">Testimonials</p>
+            <h2 className="font-inter text-2xl text-white sm:text-2xl">
               What They&apos;re Talking About Company ?
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Real villa owners across the UAE have trusted Ideal Factory for kitchens, closets,
-              doors and uPVC window systems.
-            </p>
 
             {/* Navigation */}
             <div className="mt-6 flex gap-3" role="group" aria-label="Testimonial navigation">
@@ -53,13 +81,13 @@ export function TestimonialsSection() {
               <button
                 onClick={prev}
                 aria-label="Previous testimonials"
-                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <ArrowCircleIcon
                   width={44}
                   height={44}
                   color="white"
-                  fill="transparent"
+                  fill={prevFill}
                   className="-scale-x-100"
                 />
               </button>
@@ -68,25 +96,24 @@ export function TestimonialsSection() {
               <button
                 onClick={next}
                 aria-label="Next testimonials"
-                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+                className="rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <ArrowCircleIcon width={44} height={44} color="white" fill="#57B7C0" />
+                <ArrowCircleIcon width={44} height={44} color="white" fill={nextFill} />
               </button>
             </div>
           </div>
 
-          {/* Right: testimonial carousel (linear scroll track) */}
-          <div className="overflow-hidden lg:col-span-2">
+          {/* Right: testimonial carousel (linear scroll track).
+              overflow-x-clip hides the off-screen slides horizontally while
+              leaving the cards' top/bottom glow shadow visible. */}
+          <div className="overflow-x-clip lg:col-span-2">
             <motion.div
               className="flex"
               animate={{ x: `-${page * 100}%` }}
               transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
             >
               {pages.map((group, i) => (
-                <div
-                  key={i}
-                  className="grid w-full shrink-0 grid-cols-1 gap-5 sm:grid-cols-2"
-                >
+                <div key={i} className="grid w-full shrink-0 grid-cols-1 gap-5 sm:grid-cols-2">
                   {group.map((testimonial) => (
                     <TestimonialCard key={testimonial.id} testimonial={testimonial} />
                   ))}

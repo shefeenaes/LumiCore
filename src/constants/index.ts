@@ -8,8 +8,8 @@ export const SITE_DESCRIPTION =
   "Design & Delivery of Your Villa Interiors Made Simple. Kitchens, closets, doors, and premium uPVC windows designed, manufactured, and installed by one trusted Emirati factory.";
 
 export const CONTACT_EMAIL = "info@idealhome.com";
-export const CONTACT_PHONE_1 = "+971-000-00-000";
-export const CONTACT_PHONE_2 = "971 (0)50 312 2300";
+export const CONTACT_PHONE_1 = "+ 971 - 00 - 0000000";
+export const CONTACT_PHONE_2 = "+ 971 - 50 - 3122300";
 export const CONTACT_WEBSITE = "www.idealhome.ae";
 
 export const PROBLEM_POINTS = [

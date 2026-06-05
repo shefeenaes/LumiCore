@@ -16,7 +16,7 @@ export function ProblemSection() {
       className="bg-white px-4 py-20 sm:px-6 lg:px-8"
       aria-label="Why villa interior projects become difficult"
     >
-      <div className="mx-auto max-w-[1201px]">
+      <div className="mx-auto max-w-6xl 2xl:max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,10 +25,10 @@ export function ProblemSection() {
           className="rounded-2xl bg-[#231F20] p-8 sm:p-10"
         >
           {/* Heading */}
-          <h2 className="text-[40px] font-bold text-white">
+          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-[2.6rem]">
             Why Villa Interior Projects Often Become Difficult?
           </h2>
-          <p className="mt-3 font-inter text-lg leading-relaxed text-white">
+          <p className="mt-4 max-w-4xl text-sm leading-7 text-white/80 sm:text-base">
             When interior systems are sourced from multiple suppliers, the process becomes
             fragmented, making it difficult to coordinate a consistent final result. The lack of
             commitment leads to :
@@ -41,7 +41,10 @@ export function ProblemSection() {
             aria-label="Problems caused by fragmented suppliers"
           >
             {PROBLEM_POINTS.map((point) => (
-              <li key={point.id} className="flex items-center gap-3 text-white">
+              <li
+                key={point.id}
+                className="flex items-center gap-3 text-lg font-semibold text-white"
+              >
                 <svg
                   width="34"
                   height="34"
@@ -60,7 +63,7 @@ export function ProblemSection() {
                   <path d="M22.44 16.3198H10.88V17.6798H22.44V16.3198Z" fill="white" />
                 </svg>
 
-                <span className="text-2xl font-semibold">{point.label}</span>
+                <span className="">{point.label}</span>
               </li>
             ))}
           </ul>
@@ -70,7 +73,7 @@ export function ProblemSection() {
             <div className="group relative aspect-video w-full">
               {/* Poster image — hidden once playing */}
               <Image
-                src="/images/problem/video-poster.png"
+                src="/images/problem/video-poster.jpg"
                 alt="Craftsman working with wood — precision manufacturing"
                 fill
                 sizes="(max-width: 1024px) 100vw, 1115px"

@@ -63,7 +63,7 @@ export function ContactSection() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-5xl">
+      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           {/* Left */}
           <motion.div
@@ -73,13 +73,14 @@ export function ContactSection() {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center"
           >
-            <div className="mb-5 inline-block rounded-full bg-brand-teal px-5 py-1.5 text-sm font-semibold text-black">
+            <Button type="submit" className="w-fit py-1 font-inter text-lg">
               Get in touch
-            </div>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            </Button>
+
+            <h2 className="pt-6 font-inter text-3xl text-white sm:text-[32px]">
               Let&apos;s discuss your project!
             </h2>
-            <p className="mt-4 leading-relaxed text-gray-400">
+            <p className="mt-4 font-inter text-lg leading-relaxed text-white">
               Contact us today and learn more about how our interior fit out &amp; custom
               manufacturing services can bring your ideas to life.
             </p>
@@ -94,16 +95,23 @@ export function ContactSection() {
           >
             {submitted ? (
               <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl border border-brand-teal/30 bg-brand-teal/10 p-10 text-center">
-                <div className="text-5xl" aria-hidden="true">✓</div>
+                <div className="text-5xl" aria-hidden="true">
+                  ✓
+                </div>
                 <h3 className="text-xl font-bold text-white">Thank you!</h3>
                 <p className="text-gray-300">We&apos;ll be in touch soon.</p>
               </div>
             ) : (
               <div>
-                <h2 className="mb-6 text-2xl font-bold text-white sm:text-3xl">
+                <h2 className="mb-6 font-inter text-2xl text-white sm:text-[32px]">
                   We Love to Hear From You
                 </h2>
-                <form onSubmit={handleSubmit} noValidate aria-label="Contact form" className="space-y-4">
+                <form
+                  onSubmit={handleSubmit}
+                  noValidate
+                  aria-label="Contact form"
+                  className="space-y-4"
+                >
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field
                       label="Your Name"
@@ -135,7 +143,9 @@ export function ContactSection() {
                     error={errors.phone}
                   />
                   <div>
-                    <label htmlFor="message" className="sr-only">Message</label>
+                    <label htmlFor="message" className="sr-only">
+                      Message
+                    </label>
                     <textarea
                       id="message"
                       name="message"
@@ -156,7 +166,7 @@ export function ContactSection() {
                       </p>
                     )}
                   </div>
-                  <Button type="submit" className="px-12">
+                  <Button type="submit" className="px-14 py-2 text-base">
                     Submit
                   </Button>
                 </form>
@@ -197,7 +207,7 @@ function Field({ label, id, name, type = "text", value, onChange, error, require
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={cn(
-          "w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-teal",
+          "w-full rounded-md bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-teal",
           error && "ring-2 ring-red-500"
         )}
       />

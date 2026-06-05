@@ -35,7 +35,7 @@ export function PortfolioSection() {
     >
       {/* Decorative top-left background — masked & tinted to primary color */}
       <div
-        className="bg-primary pointer-events-none absolute left-0 top-0 z-0 h-[280px] w-[200px] sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
+        className="pointer-events-none absolute left-0 top-0 z-0 h-[280px] w-[200px] bg-primary sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
         style={{
           WebkitMaskImage: "url('/images/portfolio/section-bg.png')",
           maskImage: "url('/images/portfolio/section-bg.png')",
@@ -49,10 +49,12 @@ export function PortfolioSection() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl">
+      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl">
         {/* Heading */}
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">Designed. Built. Delivered</h2>
+          <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-5xl">
+            Designed. Built. Delivered
+          </h2>
         </div>
 
         {/* Filter tabs */}
@@ -68,10 +70,10 @@ export function PortfolioSection() {
               aria-selected={active === cat.id}
               onClick={() => setActive(cat.id)}
               className={cn(
-                "rounded-full border px-5 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal",
+                "rounded-lg border px-5 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal",
                 active === cat.id
-                  ? "border-primary bg-primary text-black"
-                  : "border-white/20 bg-transparent text-white hover:border-white/50"
+                  ? "border-white bg-white text-black"
+                  : "border-white bg-transparent text-white hover:border-white/50"
               )}
             >
               {cat.label}
@@ -82,22 +84,22 @@ export function PortfolioSection() {
         {/* Portfolio grid */}
         <div className="grid auto-rows-[150px] grid-cols-2 gap-4 sm:auto-rows-[316px] sm:grid-cols-4">
           <AnimatePresence mode="popLayout">
-            {filtered.map((item) => (
-              <PortfolioTile key={item.id} item={item} />
+            {filtered.map((item, index) => (
+              <PortfolioTile key={item.id} item={item} index={index} />
             ))}
           </AnimatePresence>
         </div>
 
         {/* CTA */}
         <div className="mt-12 flex justify-center">
-          <Button withArrow>Explore Projects</Button>
+          <Button>Explore Projects</Button>
         </div>
       </div>
     </section>
   );
 }
 
-function PortfolioTile({ item }: { item: PortfolioItem }) {
+function PortfolioTile({ item, index }: { item: PortfolioItem; index: number }) {
   const spanClass = {
     feature: "col-span-2 row-span-2",
     tall: "row-span-2",
@@ -108,10 +110,11 @@ function PortfolioTile({ item }: { item: PortfolioItem }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4, ease: "easeOut", delay: (index % 8) * 0.07 }}
       className={cn("group relative overflow-hidden rounded-xl", spanClass)}
     >
       <Image

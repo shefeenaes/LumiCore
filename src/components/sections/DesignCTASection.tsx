@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/Button";
 export function DesignCTASection() {
   return (
     <section
-      className="bg-white px-4 py-20 sm:px-6 lg:px-8"
+      className="bg-white px-4 pt-10 sm:px-6 lg:px-8"
       aria-label="Design Your Villa Interiors Before Spending a Dirham"
     >
-      <div className="mx-auto max-w-[1201px]">
+      <div className="mx-auto max-w-6xl 2xl:max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,15 +41,18 @@ export function DesignCTASection() {
               <h2 className="text-[32px] font-semibold text-white">
                 Design Your Villa Interiors
                 <br />
-                <em className="text-primary not-italic">Before Spending a Dirham</em>
+                <em className="not-italic text-primary">Before Spending a Dirham</em>
               </h2>
-              <p className="mt-4 font-inter text-base leading-relaxed text-white">
+              <p className="mt-4 font-inter text-base font-light leading-relaxed text-white">
                 Upload your villa floor plan and collaborate live with our designers to create a
                 full 3D interior concept within an hour.
               </p>
 
               {/* Benefits */}
-              <ul className="mt-5 grid grid-cols-2 gap-2" role="list">
+              <ul
+                className="mt-5 grid grid-cols-1 justify-start gap-x-8 gap-y-2 sm:grid-cols-[auto_auto]"
+                role="list"
+              >
                 {DESIGN_BENEFITS.map((benefit) => (
                   <li
                     key={benefit.id}
@@ -86,7 +89,7 @@ export function DesignCTASection() {
             </div>
 
             {/* Right: step cards */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-10">
+            <div className="grid grid-cols-1 justify-items-center gap-3 pt-10 sm:grid-cols-3 sm:gap-10 md:pt-0">
               {DESIGN_STEPS.map((step, i) => {
                 const Icon = step.icon;
                 return (
@@ -96,9 +99,9 @@ export function DesignCTASection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
-                    className="border-primary flex h-[200px] w-[160px] flex-col items-center justify-center rounded-xl border p-4 text-center backdrop-blur-sm"
+                    className="flex h-[200px] w-full flex-col items-center justify-center rounded-xl border border-primary p-4 text-center backdrop-blur-sm sm:w-[160px]"
                   >
-                    <div className="border-primary bg-primary rounded-full p-4">
+                    <div className="rounded-full border-primary bg-primary p-4">
                       <Icon color="white" className="h-7 w-7" />
                     </div>
 

@@ -5,7 +5,7 @@ import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/constants";
 
 const lexend = Lexend({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-lexend",
   display: "swap",
   preload: true,
@@ -13,7 +13,7 @@ const lexend = Lexend({
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
   preload: false,

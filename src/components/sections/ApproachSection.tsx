@@ -52,7 +52,7 @@ export function ApproachSection() {
           <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-0">
             {/* Left title */}
             <div className="lg:pe-10">
-              <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
+              <h2 className="pt-0 text-3xl font-bold leading-tight text-white sm:text-4xl md:pt-4">
                 The Ideal Factory
                 <br />
                 Approach
@@ -72,7 +72,9 @@ export function ApproachSection() {
                 >
                   <div className="text-primary">{item.icon}</div>
                   <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-white">{item.description}</p>
+                  <p className="text-sm font-light leading-relaxed text-white">
+                    {item.description}
+                  </p>
                 </motion.article>
               ))}
             </div>

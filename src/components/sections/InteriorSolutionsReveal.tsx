@@ -74,9 +74,11 @@ export function InteriorSolutionsReveal() {
       aria-label="Our Interior Solutions and Services"
       id="services"
     >
-      {/* clipPath clips visually without creating a scroll container */}
+      {/* clipPath clips visually without creating a scroll container;
+          overflow-x-clip also removes the giant scaling text from the page's
+          horizontal scroll width so it can never push past the viewport */}
       <div
-        className="sticky top-0 h-screen"
+        className="sticky top-0 h-screen overflow-x-clip"
         style={{ clipPath: "inset(0)" }}
       >
 

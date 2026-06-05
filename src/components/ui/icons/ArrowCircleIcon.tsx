@@ -20,14 +20,13 @@ export default function ArrowCircleIcon({
       width={width}
       height={height}
       viewBox="0 0 35 35"
-      fill="none"
+      fill={fill}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
     >
       <path
         d="M17.5 34.1663C26.7047 34.1663 34.1667 26.7044 34.1667 17.4997C34.1667 8.29493 26.7047 0.833008 17.5 0.833008C8.29525 0.833008 0.833328 8.29493 0.833328 17.4997C0.833328 26.7044 8.29525 34.1663 17.5 34.1663Z"
-        fill={fill}
         stroke={color}
         strokeWidth="1.66667"
         strokeLinecap="round"
