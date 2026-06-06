@@ -3,29 +3,49 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import type { Service } from "@/types";
 
 type ServiceCardProps = {
   service: Service;
   index: number;
+  /** Extra classes for the photo wrapper — use breakpoint-prefixed `aspect-[w/h]` + `h-auto` to override the default clamp()-based height on larger screens only. */
+  imageClassName?: string;
+  /** When false, skip Framer Motion's own viewport-triggered entrance — an
+   * external scroll system (e.g. GSAP ScrollTrigger) drives opacity/transform
+   * instead, marked via the `reveal-card` class. Needed inside pinned sections,
+   * where IntersectionObserver sees the card as "in view" the instant the pin
+   * engages — long before the user actually gets to see it — so the built-in
+   * entrance finishes invisibly and the card just pops in fully-formed. */
+  animateOnScroll?: boolean;
 };
 
-export function ServiceCard({ service, index }: ServiceCardProps) {
+export function ServiceCard({
+  service,
+  index,
+  imageClassName,
+  animateOnScroll = true,
+}: ServiceCardProps) {
   const Icon = service.icon;
+  const scrollAnim = animateOnScroll
+    ? {
+        initial: { opacity: 0, y: 50, scale: 0.93 },
+        whileInView: { opacity: 1, y: 0, scale: 1 },
+        viewport: { once: true, margin: "150px 0px" },
+        transition: { duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] as const },
+      }
+    : { initial: false as const };
   return (
     <motion.article
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group flex flex-col overflow-hidden rounded-[10px] border border-white/5 bg-[rgba(35,31,32,0.8)] backdrop-blur-[2px]"
+      {...scrollAnim}
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-[10px] border border-white/5 bg-[rgba(35,31,32,0.8)] backdrop-blur-[2px]",
+        !animateOnScroll && "reveal-card"
+      )}
       aria-label={service.title}
     >
       {/* Image */}
-      <div
-        className="relative overflow-hidden"
-        style={{ height: "clamp(220px, 32vh, 380px)" }}
-      >
+      <div className={cn("relative h-[clamp(220px,32vh,380px)] overflow-hidden", imageClassName)}>
         <Image
           src={service.image}
           alt={service.title}
