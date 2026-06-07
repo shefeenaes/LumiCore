@@ -43,26 +43,23 @@ export function InteriorSolutionsReveal() {
     const ctx = gsap.context(() => {
       const wordSpans = gsap.utils.toArray<HTMLElement>(".reveal-word");
 
+      // Batch all geometry reads BEFORE any GSAP writes so we never interleave
+      // a style-write with a geometry-read (which forces a synchronous reflow).
+      const heroHeading = heroOverlayRef.current?.querySelector<HTMLElement>("h2");
+      const realHeading = contentRef.current?.querySelector<HTMLElement>("h2");
+      const heroRect = heroHeading?.getBoundingClientRect();
+      const realRect = realHeading?.getBoundingClientRect();
+      const riseDistance = heroRect && realRect ? realRect.top - heroRect.top : 0;
+
       const maskState = { outer: 200, inner: 180 };
       const applyMask = () => {
         const m = `radial-gradient(ellipse ${maskState.outer}% ${maskState.inner}% at 50% 50%, transparent 98%, black 100%)`;
         if (blurMaskRef.current) {
           blurMaskRef.current.style.maskImage = m;
-          blurMaskRef.current.style.webkitMaskImage = m;
+          blurMaskRef.current.style.setProperty("-webkit-mask-image", m);
         }
       };
       applyMask();
-
-      // Distance the hero heading must travel from its centered resting spot
-      // up to the exact position where the real heading sits beneath it —
-      // measured live so the "arrival" lines up pixel-for-pixel regardless
-      // of breakpoint/font metrics.
-      const heroHeading = heroOverlayRef.current?.querySelector<HTMLElement>("h2");
-      const realHeading = contentRef.current?.querySelector<HTMLElement>("h2");
-      const riseDistance =
-        heroHeading && realHeading
-          ? realHeading.getBoundingClientRect().top - heroHeading.getBoundingClientRect().top
-          : 0;
 
       // Cards stay hidden until the pin actually releases — geometry-based
       // triggers (whileInView, a ScrollTrigger on the grid) fire the instant
