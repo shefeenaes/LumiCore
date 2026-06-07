@@ -3,13 +3,14 @@ import BuildingIcon from "@/components/ui/icons/BuildingIcon";
 import LockIcon from "@/components/ui/icons/LockIcon";
 import DoorIcon from "@/components/ui/icons/DoorIcon";
 import WindowIcon from "@/components/ui/icons/WindowIcon";
+import { CDN } from "@/lib/cloudinary";
 
 export const services: Service[] = [
   {
     id: "kitchens",
     title: "Kitchens",
     description: "Designed for daily use, built for long-term performance",
-    image: "/images/services/kitchen.png",
+    image: CDN.services.kitchen,
     icon: BuildingIcon,
     category: "kitchen",
   },
@@ -17,7 +18,7 @@ export const services: Service[] = [
     id: "wardrobes",
     title: "Wardrobes & Closets",
     description: "Structured storage that stays organized over time",
-    image: "/images/services/closet.png",
+    image: CDN.services.closet,
     icon: LockIcon,
     category: "closet",
   },
@@ -25,7 +26,7 @@ export const services: Service[] = [
     id: "doors",
     title: "Wooden Doors",
     description: "Precise finishes that hold up with everyday use",
-    image: "/images/services/door.png",
+    image: CDN.services.door,
     icon: DoorIcon,
     category: "door",
   },
@@ -33,7 +34,7 @@ export const services: Service[] = [
     id: "windows",
     title: "Premium Window Systems",
     description: "Sealed systems for better comfort and control",
-    image: "/images/services/window.jpg",
+    image: CDN.services.window,
     icon: WindowIcon,
     category: "upvc-windows",
   },

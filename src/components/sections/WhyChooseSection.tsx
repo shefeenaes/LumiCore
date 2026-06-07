@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { WHY_CHOOSE_POINTS } from "@/constants";
 import { Button } from "@/components/ui/Button";
 import PhoneIcon from "../ui/icons/PhoneIcon";
+import { CDN } from "@/lib/cloudinary";
 
 export function WhyChooseSection() {
   return (
@@ -29,7 +30,7 @@ export function WhyChooseSection() {
                 breaks out of the card for a 3D pop */}
             <div className="relative flex items-end justify-center pt-8 lg:block lg:self-stretch lg:pt-0">
               <Image
-                src="/images/why-choose/villa-3d.png"
+                src={CDN.villa3d}
                 alt="3D rendered modern kitchen design illustration"
                 width={692}
                 height={565}

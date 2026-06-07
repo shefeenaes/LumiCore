@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { DESIGN_BENEFITS, DESIGN_STEPS } from "@/constants";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { CDN } from "@/lib/cloudinary";
 
 export function DesignCTASection() {
   return (
@@ -21,7 +22,7 @@ export function DesignCTASection() {
         >
           {/* Background image */}
           <Image
-            src="/images/design-cta/bg.jpg"
+            src={CDN.designCtaBg}
             alt="Luxury kitchen background"
             fill
             className="object-cover"

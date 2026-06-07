@@ -9,6 +9,7 @@ import { MobileMenu } from "./MobileMenu";
 import Image from "next/image";
 import PhoneIcon from "../ui/icons/PhoneIcon";
 import { Button } from "@/components/ui/Button";
+import { CDN } from "@/lib/cloudinary";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -55,7 +56,7 @@ export function Header() {
             aria-label="Ideal Factory – Home"
           >
             <Image
-              src="/images/brand/logo.png"
+              src={CDN.logo}
               alt="Ideal Factory logo"
               width={155}
               height={60}

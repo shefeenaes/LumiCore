@@ -6,6 +6,7 @@ import { services } from "@/data/services";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { Button } from "@/components/ui/Button";
 import IdealFactoryMarkIcon from "@/components/ui/icons/IdealFactoryMarkIcon";
+import { CDN } from "@/lib/cloudinary";
 
 export function SolutionsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -17,22 +18,22 @@ export function SolutionsSection() {
 
   // ── Oval → full rectangle ──
   // Insets shrink to 0 so the oval div expands to cover full viewport
-  const ovalTop    = useTransform(scrollYProgress, [0.0, 0.28], ["8%",  "0%"]);
-  const ovalBottom = useTransform(scrollYProgress, [0.0, 0.28], ["8%",  "0%"]);
-  const ovalLeft   = useTransform(scrollYProgress, [0.0, 0.28], ["4%",  "0%"]);
-  const ovalRight  = useTransform(scrollYProgress, [0.0, 0.28], ["4%",  "0%"]);
+  const ovalTop = useTransform(scrollYProgress, [0.0, 0.28], ["8%", "0%"]);
+  const ovalBottom = useTransform(scrollYProgress, [0.0, 0.28], ["8%", "0%"]);
+  const ovalLeft = useTransform(scrollYProgress, [0.0, 0.28], ["4%", "0%"]);
+  const ovalRight = useTransform(scrollYProgress, [0.0, 0.28], ["4%", "0%"]);
   const ovalRadius = useTransform(scrollYProgress, [0.0, 0.28], ["50%", "0%"]);
 
   // Overlay darkens the oval image slightly while framed, clears when full
   const overlayOpacity = useTransform(scrollYProgress, [0.0, 0.28], [0.45, 0.65]);
 
   // ── Hero text: visible at start, moves up and fades ──
-  const heroOpacity = useTransform(scrollYProgress, [0.10, 0.32], [1, 0]);
-  const heroY       = useTransform(scrollYProgress, [0.10, 0.32], [0, -80]);
+  const heroOpacity = useTransform(scrollYProgress, [0.1, 0.32], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0.1, 0.32], [0, -80]);
 
   // ── Grid: slides up and fades in after oval is full ──
-  const gridOpacity = useTransform(scrollYProgress, [0.32, 0.50], [0, 1]);
-  const gridY       = useTransform(scrollYProgress, [0.32, 0.50], [60, 0]);
+  const gridOpacity = useTransform(scrollYProgress, [0.32, 0.5], [0, 1]);
+  const gridY = useTransform(scrollYProgress, [0.32, 0.5], [60, 0]);
 
   return (
     <section
@@ -42,11 +43,10 @@ export function SolutionsSection() {
       id="solutions"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-
         {/* Dark marble base — visible outside the oval */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/interior/marble-bg.jpg')" }}
+          style={{ backgroundImage: `url(${CDN.marbleBg})` }}
           aria-hidden="true"
         />
 
@@ -65,7 +65,7 @@ export function SolutionsSection() {
           {/* bg-2-image.jpg fills the oval */}
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/interior/villa-reveal.jpg')" }}
+            style={{ backgroundImage: `url(${CDN.villaReveal})` }}
             aria-hidden="true"
           />
           {/* Transparent dark overlay on the image */}
@@ -87,12 +87,8 @@ export function SolutionsSection() {
             primaryColor="#ffffff"
             secondaryColor="#ffffff"
           />
-          <h2 className="mt-5 text-4xl font-bold text-white lg:text-5xl">
-            Our Solutions
-          </h2>
-          <p className="mt-3 text-lg font-medium text-white">
-            We provide all type of modular
-          </p>
+          <h2 className="mt-5 text-4xl font-bold text-white lg:text-5xl">Our Solutions</h2>
+          <p className="mt-3 text-lg font-medium text-white">We provide all type of modular</p>
           <p className="mt-1 text-lg font-semibold text-brand-teal">
             KITCHEN, CLOSET, DOOR Services
           </p>
@@ -105,13 +101,9 @@ export function SolutionsSection() {
         >
           <div className="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">
             <div className="mb-10 text-center">
-              <h2 className="text-3xl font-bold text-white sm:text-4xl">
-                Our Solutions
-              </h2>
+              <h2 className="text-3xl font-bold text-white sm:text-4xl">Our Solutions</h2>
               <p className="mt-2 text-gray-300">We provide all type of modular</p>
-              <p className="font-semibold text-brand-teal">
-                KITCHEN, CLOSET, DOOR Services
-              </p>
+              <p className="font-semibold text-brand-teal">KITCHEN, CLOSET, DOOR Services</p>
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -125,7 +117,6 @@ export function SolutionsSection() {
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

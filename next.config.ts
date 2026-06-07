@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         hostname: "plus.unsplash.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dtqevpvs4/**",
+      },
     ],
     formats: ["image/avif", "image/webp"],
   },

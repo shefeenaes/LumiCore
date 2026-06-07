@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { services } from "@/data/services";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { Button } from "@/components/ui/Button";
+import { CDN } from "@/lib/cloudinary";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -51,6 +52,12 @@ export function InteriorSolutionsReveal() {
       const realRect = realHeading?.getBoundingClientRect();
       const riseDistance = heroRect && realRect ? realRect.top - heroRect.top : 0;
 
+      // Responsive font sizes — scale with viewport so the text fills the screen
+      // proportionally on mobile without overflowing the 375px-wide frame.
+      const vw = window.innerWidth;
+      const startFontSize = Math.min(160, Math.max(36, vw * 0.2));
+      const endFontSize = vw < 640 ? Math.round(vw * 1.6) : 1000;
+
       const maskState = { outer: 200, inner: 180 };
       const applyMask = () => {
         const m = `radial-gradient(ellipse ${maskState.outer}% ${maskState.inner}% at 50% 50%, transparent 98%, black 100%)`;
@@ -60,6 +67,7 @@ export function InteriorSolutionsReveal() {
         }
       };
       applyMask();
+      gsap.set(wordSpans, { fontSize: startFontSize });
 
       // Cards stay hidden until the pin actually releases — geometry-based
       // triggers (whileInView, a ScrollTrigger on the grid) fire the instant
@@ -100,7 +108,7 @@ export function InteriorSolutionsReveal() {
 
       tl
         // Phase 1: text mask zoom (0.05 → 0.74)
-        .to(wordSpans, { fontSize: "1000px", duration: 0.65 }, 0.05)
+        .to(wordSpans, { fontSize: endFontSize, duration: 0.65 }, 0.05)
         .to(outlineGroupRef.current, { opacity: 0, duration: 0.17 }, 0.05)
         .fromTo(fillGroupRef.current, { opacity: 0 }, { opacity: 1, duration: 0.19 }, 0.05)
         .fromTo(villaRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.5)
@@ -145,14 +153,14 @@ export function InteriorSolutionsReveal() {
         {/* Layer 0: Marble base */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/interior/marble-bg.jpg')" }}
+          style={{ backgroundImage: `url(${CDN.marbleBg})` }}
           aria-hidden="true"
         />
 
         {/* Layer 1: Villa image */}
         <div
           ref={villaRef}
-          style={{ opacity: 0, backgroundImage: "url('/images/interior/villa-reveal.jpg')" }}
+          style={{ opacity: 0, backgroundImage: `url(${CDN.villaReveal})` }}
           className="absolute inset-0 bg-cover bg-center"
           aria-hidden="true"
         />
@@ -169,8 +177,8 @@ export function InteriorSolutionsReveal() {
               className="reveal-word"
               style={{
                 ...BASE,
-                fontSize: "160px",
-                WebkitTextStroke: "3px white",
+                fontSize: "clamp(36px, 20vw, 160px)",
+                WebkitTextStroke: "clamp(1px, 0.25vw, 3px) white",
                 color: "transparent",
               }}
             >
@@ -191,8 +199,8 @@ export function InteriorSolutionsReveal() {
                 className="reveal-word"
                 style={{
                   ...BASE,
-                  fontSize: "160px",
-                  WebkitTextStroke: "4px white",
+                  fontSize: "clamp(36px, 20vw, 160px)",
+                  WebkitTextStroke: "clamp(1.5px, 0.3vw, 4px) white",
                   color: "#0d0d0d",
                   paintOrder: "stroke fill",
                 }}
@@ -204,7 +212,7 @@ export function InteriorSolutionsReveal() {
           <div
             className="absolute inset-0 flex flex-col items-center justify-center"
             style={{
-              backgroundImage: "url('/images/interior/villa-reveal.jpg')",
+              backgroundImage: `url(${CDN.villaReveal})`,
               backgroundSize: "cover",
               backgroundAttachment: "fixed",
               backgroundPosition: "center",
@@ -214,7 +222,11 @@ export function InteriorSolutionsReveal() {
             }}
           >
             {WORDS.map((w) => (
-              <span key={w} className="reveal-word" style={{ ...BASE, fontSize: "160px" }}>
+              <span
+                key={w}
+                className="reveal-word"
+                style={{ ...BASE, fontSize: "clamp(36px, 20vw, 160px)" }}
+              >
                 {w}
               </span>
             ))}
@@ -230,16 +242,18 @@ export function InteriorSolutionsReveal() {
           className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8"
         >
           <Image
-            src="/images/brand/logo-icon.png"
+            src={CDN.logoIcon}
             alt=""
             width={72}
             height={72}
-            className="pointer-events-none mb-4"
+            className="pointer-events-none mb-3 h-12 w-12 sm:mb-4 sm:h-[72px] sm:w-[72px]"
             aria-hidden="true"
           />
-          <h2 className="text-4xl font-bold text-white lg:text-5xl">Our Solutions</h2>
-          <p className="mt-2 text-lg font-medium text-white">We provide all types of integrated</p>
-          <p className="mt-1 text-lg font-semibold" style={{ color: "#57B7C0" }}>
+          <h2 className="text-2xl font-bold text-white sm:text-4xl lg:text-5xl">Our Solutions</h2>
+          <p className="mt-1 text-sm font-medium text-white sm:mt-2 sm:text-lg">
+            We provide all types of integrated
+          </p>
+          <p className="mt-1 text-sm font-semibold sm:text-lg" style={{ color: "#57B7C0" }}>
             KITCHEN, CLOSET, DOOR Services
           </p>
         </div>
@@ -266,12 +280,12 @@ export function InteriorSolutionsReveal() {
       <div
         ref={contentRef}
         style={{ opacity: 0 }}
-        className="relative z-10 w-full overflow-hidden pb-20 pt-[16vh] sm:pb-24 sm:pt-[18vh]"
+        className="relative z-10 w-full overflow-hidden pb-16 pt-[12vh] sm:pb-24 sm:pt-[18vh]"
       >
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('/images/interior/villa-reveal.jpg')",
+            backgroundImage: `url(${CDN.villaReveal})`,
             filter: "blur(8px)",
             transform: "scale(1.03)",
           }}
@@ -289,18 +303,18 @@ export function InteriorSolutionsReveal() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 xl:max-w-[1416px]">
           <div className="flex flex-col items-center text-center">
             <Image
-              src="/images/brand/logo-icon.png"
+              src={CDN.logoIcon}
               alt=""
               width={72}
               height={72}
-              className="pointer-events-none mb-4"
+              className="pointer-events-none mb-3 h-12 w-12 sm:mb-4 sm:h-[72px] sm:w-[72px]"
               aria-hidden="true"
             />
-            <h2 className="text-4xl font-bold text-white lg:text-5xl">Our Solutions</h2>
-            <p className="mt-2 text-lg font-medium text-white">
+            <h2 className="text-2xl font-bold text-white sm:text-4xl lg:text-5xl">Our Solutions</h2>
+            <p className="mt-1 text-sm font-medium text-white sm:mt-2 sm:text-lg">
               We provide all types of integrated
             </p>
-            <p className="mt-1 text-lg font-semibold" style={{ color: "#57B7C0" }}>
+            <p className="mt-1 text-sm font-semibold sm:text-lg" style={{ color: "#57B7C0" }}>
               KITCHEN, CLOSET, DOOR Services
             </p>
           </div>

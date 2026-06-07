@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Globe, Mail, Phone } from "lucide-react";
 import { CONTACT_EMAIL, CONTACT_PHONE_1, CONTACT_PHONE_2, CONTACT_WEBSITE } from "@/constants";
+import { CDN } from "@/lib/cloudinary";
 
 const quickLinks = [
   { label: "About Us", href: "#about" },
@@ -68,7 +69,7 @@ export function Footer() {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url(/images/layout/footer-bg.jpg)",
+          backgroundImage: `url(${CDN.footerBg})`,
         }}
         aria-hidden="true"
       />
@@ -81,7 +82,7 @@ export function Footer() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <Image
-                src="/images/brand/logo.png"
+                src={CDN.logo}
                 alt="Ideal Factory logo"
                 width={167}
                 height={64}

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { navItems } from "@/data/navigation";
 import PhoneIcon from "../ui/icons/PhoneIcon";
 import { Button } from "@/components/ui/Button";
+import { CDN } from "@/lib/cloudinary";
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -54,7 +55,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
               <div className="flex flex-1 justify-center">
                 <Image
-                  src="/images/brand/logo.png"
+                  src={CDN.logo}
                   alt="Ideal Factory"
                   width={155}
                   height={60}
@@ -73,7 +74,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className="hover:text-primary focus-visible:text-primary block px-5 py-4 text-base text-white transition-colors last:border-0 focus-visible:outline-none"
+                    className="block px-5 py-4 text-base text-white transition-colors last:border-0 hover:text-primary focus-visible:text-primary focus-visible:outline-none"
                   >
                     {item.label}
                   </Link>
@@ -82,11 +83,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
               {/* CTA */}
               <div className="p-3">
-                <Button
-                  href="#contact"
-                  onClick={onClose}
-                  className="mt-2 w-full text-sm"
-                >
+                <Button href="#contact" onClick={onClose} className="mt-2 w-full text-sm">
                   <PhoneIcon className="h-5 w-5 shrink-0" />
                   Start Your Project
                 </Button>

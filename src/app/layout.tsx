@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Lexend, Inter } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, CONTACT_EMAIL, CONTACT_PHONE_2 } from "@/constants";
+import { CDN } from "@/lib/cloudinary";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/images/brand/logo-icon.png",
+    apple: CDN.logoIcon,
   },
   robots: {
     index: true,
@@ -70,7 +71,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/images/interior/villa-reveal.jpg",
+        url: CDN.villaReveal,
         width: 1200,
         height: 630,
         alt: "Ideal Factory – Villa Interior Design & Manufacturing in UAE",
@@ -81,7 +82,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} | Villa Interior Design & Manufacturing in UAE`,
     description: SITE_DESCRIPTION,
-    images: ["/images/interior/villa-reveal.jpg"],
+    images: [CDN.villaReveal],
   },
   alternates: {
     canonical: SITE_URL,
@@ -99,9 +100,9 @@ const jsonLd = {
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/images/brand/logo.png`,
+        url: CDN.logo,
       },
-      image: `${SITE_URL}/images/interior/villa-reveal.jpg`,
+      image: CDN.villaReveal,
       telephone: CONTACT_PHONE_2,
       email: CONTACT_EMAIL,
       address: {

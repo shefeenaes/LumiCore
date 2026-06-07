@@ -11,7 +11,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "upload": "node --env-file=.env.local scripts/upload-to-cloudinary.mjs",
+    "upload:compressed": "node --env-file=.env.local scripts/upload-compressed.mjs",
+    "compress": "node scripts/compress-images.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -19,6 +22,7 @@
     "gsap": "^3.15.0",
     "lucide-react": "^0.468.0",
     "next": "^15.3.3",
+    "next-cloudinary": "^6.17.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.5.5"
@@ -28,6 +32,7 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
+    "cloudinary": "^2.10.0",
     "eslint": "^9.17.0",
     "eslint-config-next": "^15.3.3",
     "husky": "^9.1.7",

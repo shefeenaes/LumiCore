@@ -5,6 +5,7 @@ import { motion, type Variants } from "framer-motion";
 import { Play } from "lucide-react";
 import Image from "next/image";
 import { PROBLEM_POINTS } from "@/constants";
+import { CDN } from "@/lib/cloudinary";
 import { ApproachSection } from "./ApproachSection";
 import { DesignCTASection } from "./DesignCTASection";
 
@@ -129,7 +130,7 @@ export function ProblemSection() {
               <div className="group relative aspect-video w-full">
                 {/* Poster image — hidden once playing */}
                 <Image
-                  src="/images/problem/video-poster.jpg"
+                  src={CDN.videoPoster}
                   alt="Craftsman working with wood — precision manufacturing"
                   fill
                   sizes="(max-width: 1024px) 100vw, 1115px"
@@ -140,7 +141,7 @@ export function ProblemSection() {
 
                 {/* Video — fades in when playing */}
                 <video
-                  src="/images/problem/customer-journey.mp4"
+                  src={CDN.customerJourney}
                   playsInline
                   preload="none"
                   controls={playing}

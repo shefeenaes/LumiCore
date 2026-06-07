@@ -7,6 +7,7 @@ import { portfolioItems } from "@/data/portfolio";
 import { Button } from "@/components/ui/Button";
 import type { PortfolioCategory, PortfolioItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { CDN } from "@/lib/cloudinary";
 
 const categories: { id: PortfolioCategory; label: string }[] = [
   { id: "all", label: "All" },
@@ -37,8 +38,8 @@ export function PortfolioSection() {
       <div
         className="pointer-events-none absolute left-0 top-0 z-0 h-[280px] w-[200px] bg-primary sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
         style={{
-          WebkitMaskImage: "url('/images/portfolio/section-bg.png')",
-          maskImage: "url('/images/portfolio/section-bg.png')",
+          WebkitMaskImage: `url(${CDN.portfolio.sectionBg})`,
+          maskImage: `url(${CDN.portfolio.sectionBg})`,
           WebkitMaskRepeat: "no-repeat",
           maskRepeat: "no-repeat",
           WebkitMaskPosition: "left top",

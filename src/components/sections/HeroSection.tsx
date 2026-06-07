@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import ChatIcon from "../ui/icons/ChatIcon";
+import { CDN } from "@/lib/cloudinary";
 
 export function HeroSection() {
   return (
@@ -9,8 +10,8 @@ export function HeroSection() {
     >
       {/* Background video */}
       <video
-        src="/images/hero/bg-video.mp4"
-        poster="/images/interior/villa-reveal.jpg"
+        src={CDN.bgVideo}
+        poster={CDN.villaReveal}
         autoPlay
         loop
         muted
