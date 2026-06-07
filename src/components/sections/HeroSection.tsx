@@ -10,10 +10,12 @@ export function HeroSection() {
       {/* Background video */}
       <video
         src="/images/hero/bg-video.mp4"
+        poster="/images/interior/villa-reveal.jpg"
         autoPlay
         loop
         muted
         playsInline
+        preload="none"
         className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       />
@@ -60,7 +62,7 @@ export function HeroSection() {
         aria-label="Chat with our support team"
         className="fixed bottom-8 right-6 z-20 flex h-16 w-16 items-center justify-center rounded-full"
       >
-        <span className="bg-primary/40 absolute h-16 w-16 animate-ping rounded-full" />
+        <span className="absolute h-16 w-16 animate-ping rounded-full bg-primary/40" />
         <ChatIcon />
       </a>
     </section>

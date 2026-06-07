@@ -69,9 +69,9 @@ export function ServiceCard({
       {/* Content row: text left, arrow right */}
       <div className="flex w-full flex-1 flex-row items-center justify-between px-5 py-5">
         <div>
-          <h4 className="font-inter text-2xl font-semibold leading-[1.3] text-white">
+          <h3 className="font-inter text-2xl font-semibold leading-[1.3] text-white">
             {service.title}
-          </h4>
+          </h3>
           <p className="font-inter text-base font-normal leading-[1.5] text-white/90">
             {service.description}
           </p>
