@@ -16,10 +16,10 @@ if (typeof window !== "undefined") {
 const BASE: React.CSSProperties = {
   display: "block",
   fontFamily: "var(--font-lexend), sans-serif",
-  fontWeight: 700,
+  fontWeight: 400,
   textTransform: "uppercase",
-  lineHeight: "1.1",
-  letterSpacing: "-0.01em",
+  lineHeight: "1.2",
+  letterSpacing: "0",
 };
 
 const WORDS = ["OUR", "INTERIOR", "SOLUTIONS"] as const;
@@ -27,6 +27,7 @@ const WORDS = ["OUR", "INTERIOR", "SOLUTIONS"] as const;
 export function InteriorSolutionsReveal() {
   const sectionRef = useRef<HTMLElement>(null);
   const villaRef = useRef<HTMLDivElement>(null);
+  const marbleFillRef = useRef<HTMLDivElement>(null);
   const outlineGroupRef = useRef<HTMLDivElement>(null);
   const fillGroupRef = useRef<HTMLDivElement>(null);
   const heroOverlayRef = useRef<HTMLDivElement>(null);
@@ -34,28 +35,24 @@ export function InteriorSolutionsReveal() {
   const blurMaskRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Pins the section like the reference's GSAP-driven `<section id="solutions">`:
-  // a `pin-spacer` reserves the scroll distance, the section itself is held in
-  // place (transform, not CSS sticky) so its absolutely-positioned spectacle
-  // layers can crossfade IN PLACE over the real content sitting beneath them —
-  // then the pin releases and the section "catches up" to its natural position,
-  // revealing the rest of the grid via ordinary scrolling (nothing is clipped).
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Only spans with reveal-word get fontSize animated — marbleFillRef children
+      // intentionally have no reveal-word class so background-clip:text never
+      // recomputes during the animation (which would cause jank).
       const wordSpans = gsap.utils.toArray<HTMLElement>(".reveal-word");
 
-      // Batch all geometry reads BEFORE any GSAP writes so we never interleave
-      // a style-write with a geometry-read (which forces a synchronous reflow).
       const heroHeading = heroOverlayRef.current?.querySelector<HTMLElement>("h2");
       const realHeading = contentRef.current?.querySelector<HTMLElement>("h2");
       const heroRect = heroHeading?.getBoundingClientRect();
       const realRect = realHeading?.getBoundingClientRect();
       const riseDistance = heroRect && realRect ? realRect.top - heroRect.top : 0;
 
-      // Responsive font sizes — scale with viewport so the text fills the screen
-      // proportionally on mobile without overflowing the 375px-wide frame.
       const vw = window.innerWidth;
-      const startFontSize = Math.min(160, Math.max(36, vw * 0.2));
+      const vh = window.innerHeight;
+      // Mirror the CSS clamp(16px, min(11vw, 18vh), 160px) exactly so the
+      // GSAP starting size always matches what the static marble layer renders.
+      const startFontSize = Math.min(160, Math.max(16, Math.min(vw * 0.11, vh * 0.18)));
       const endFontSize = vw < 640 ? Math.round(vw * 1.6) : 1000;
 
       const maskState = { outer: 200, inner: 180 };
@@ -69,14 +66,6 @@ export function InteriorSolutionsReveal() {
       applyMask();
       gsap.set(wordSpans, { fontSize: startFontSize });
 
-      // Cards stay hidden until the pin actually releases — geometry-based
-      // triggers (whileInView, a ScrollTrigger on the grid) fire the instant
-      // the pin engages, since the grid already sits within the viewport
-      // behind the still-hidden hero; the reveal would finish invisibly and
-      // the cards would just pop in fully-formed. `onLeave` fires exactly
-      // once, the moment the user scrolls past the pinned sequence and the
-      // section releases — the natural "later" beat — so the stagger plays
-      // out for real, in front of the user, as its own distinct moment.
       const cards = gsap.utils.toArray<HTMLElement>(".reveal-card");
       gsap.set(cards, { opacity: 0, y: 50, scale: 0.93 });
       let cardsRevealed = false;
@@ -107,13 +96,14 @@ export function InteriorSolutionsReveal() {
       });
 
       tl
-        // Phase 1: text mask zoom (0.05 → 0.74)
+        // Phase 1: text zooms; marble + outline fade; villa fill reveals through letters
         .to(wordSpans, { fontSize: endFontSize, duration: 0.65 }, 0.05)
+        .to(marbleFillRef.current, { opacity: 0, duration: 0.17 }, 0.05)
         .to(outlineGroupRef.current, { opacity: 0, duration: 0.17 }, 0.05)
         .fromTo(fillGroupRef.current, { opacity: 0 }, { opacity: 1, duration: 0.19 }, 0.05)
         .fromTo(villaRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.5)
         .to(fillGroupRef.current, { opacity: 0, duration: 0.12 }, 0.62)
-        // Phase 2: hero heading fades in CENTERED in the viewport-window (0.70 → 0.76)
+        // Phase 2: hero heading fades in centered
         .fromTo(
           heroOverlayRef.current,
           { opacity: 0, y: 24 },
@@ -122,13 +112,9 @@ export function InteriorSolutionsReveal() {
         )
         .fromTo(blurLayerRef.current, { opacity: 0 }, { opacity: 1, duration: 0.12 }, 0.76)
         .to(maskState, { outer: 92, inner: 84, duration: 0.16, onUpdate: applyMask }, 0.76)
-        // Phase 3: it travels straight up from center toward the exact spot
-        // where the real heading sits beneath it — one continuous rise, timed
-        // to land precisely as the scroll reaches that point.
+        // Phase 3: heading rises to land on real heading
         .to(heroOverlayRef.current, { y: riseDistance, duration: 0.16, ease: "power1.inOut" }, 0.78)
-        // Phase 4: the instant it arrives, it cuts — fades out and the real
-        // content appears immediately in the exact same spot, with no lingering
-        // overlap. The "handoff" reads as instantaneous, not a slow dissolve.
+        // Phase 4: handoff to real content
         .to(heroOverlayRef.current, { opacity: 0, duration: 0.03 }, 0.94)
         .fromTo(contentRef.current, { opacity: 0 }, { opacity: 1, duration: 0.03 }, 0.94);
     }, sectionRef);
@@ -143,21 +129,15 @@ export function InteriorSolutionsReveal() {
       aria-label="Our Interior Solutions and Services"
       id="services"
     >
-      {/* Spectacle layers — pinned to the section's top edge and capped at exactly
-          one viewport height (NOT `inset-0`, which would size to the section's
-          full, taller-than-viewport height and center content far below the
-          visible pinned window). This keeps "centered" content centered in the
-          viewport-window itself, lining it up with the real heading beneath it
-          for a true in-place crossfade. */}
       <div className="absolute inset-x-0 top-0 h-screen overflow-hidden">
-        {/* Layer 0: Marble base */}
+        {/* Layer 0: Marble base — full background at start */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${CDN.marbleBg})` }}
           aria-hidden="true"
         />
 
-        {/* Layer 1: Villa image */}
+        {/* Layer 1: Villa image — fades in mid-animation */}
         <div
           ref={villaRef}
           style={{ opacity: 0, backgroundImage: `url(${CDN.villaReveal})` }}
@@ -165,7 +145,31 @@ export function InteriorSolutionsReveal() {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Outlined text */}
+        {/* Layer 2a: Marble clipped inside letters — STATIC font size so
+            background-clip:text never recomputes while GSAP is running.
+            GSAP only touches opacity on this ref, never fontSize. */}
+        <div
+          ref={marbleFillRef}
+          className="absolute inset-0 flex flex-col items-center justify-center"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `url(${CDN.marbleBg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          {WORDS.map((w) => (
+            <span key={w} style={{ ...BASE, fontSize: "clamp(16px, min(11vw, 18vh), 160px)" }}>
+              {w}
+            </span>
+          ))}
+        </div>
+
+        {/* Layer 2b: White stroke outline — HAS reveal-word so GSAP zooms fontSize.
+            No background-clip here so font-size changes cause no reflow jank. */}
         <div
           ref={outlineGroupRef}
           className="absolute inset-0 flex flex-col items-center justify-center"
@@ -177,7 +181,7 @@ export function InteriorSolutionsReveal() {
               className="reveal-word"
               style={{
                 ...BASE,
-                fontSize: "clamp(36px, 20vw, 160px)",
+                fontSize: "clamp(16px, min(11vw, 18vh), 160px)",
                 WebkitTextStroke: "clamp(1px, 0.25vw, 3px) white",
                 color: "transparent",
               }}
@@ -187,7 +191,10 @@ export function InteriorSolutionsReveal() {
           ))}
         </div>
 
-        {/* Layer 3: Image-masked growing text */}
+        {/* Layer 3: Villa image through letter shapes — fades in as scroll starts,
+            fades out once villa bg is fully revealed. Two sub-layers:
+            A) dark fill + white stroke (prevents marble bleeding through stroke gap)
+            B) villa image clipped to letter shapes via background-clip:text */}
         <div ref={fillGroupRef} style={{ opacity: 0 }} className="absolute inset-0">
           <div
             aria-hidden="true"
@@ -199,7 +206,7 @@ export function InteriorSolutionsReveal() {
                 className="reveal-word"
                 style={{
                   ...BASE,
-                  fontSize: "clamp(36px, 20vw, 160px)",
+                  fontSize: "clamp(16px, min(11vw, 18vh), 160px)",
                   WebkitTextStroke: "clamp(1.5px, 0.3vw, 4px) white",
                   color: "#0d0d0d",
                   paintOrder: "stroke fill",
@@ -214,7 +221,6 @@ export function InteriorSolutionsReveal() {
             style={{
               backgroundImage: `url(${CDN.villaReveal})`,
               backgroundSize: "cover",
-              backgroundAttachment: "fixed",
               backgroundPosition: "center",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -225,7 +231,7 @@ export function InteriorSolutionsReveal() {
               <span
                 key={w}
                 className="reveal-word"
-                style={{ ...BASE, fontSize: "clamp(36px, 20vw, 160px)" }}
+                style={{ ...BASE, fontSize: "clamp(16px, min(11vw, 18vh), 160px)" }}
               >
                 {w}
               </span>
@@ -233,9 +239,7 @@ export function InteriorSolutionsReveal() {
           </div>
         </div>
 
-        {/* Layer 4: Hero heading overlay — lands centered in the viewport, then
-            rises to land exactly on top of the real heading beneath it, where
-            it cuts over to the real content in a single instantaneous beat */}
+        {/* Layer 4: Hero heading overlay */}
         <div
           ref={heroOverlayRef}
           style={{ opacity: 0 }}
@@ -258,7 +262,7 @@ export function InteriorSolutionsReveal() {
           </p>
         </div>
 
-        {/* Layer 5: Backdrop-blur oval frame */}
+        {/* Layer 5: Backdrop-blur oval */}
         <div ref={blurLayerRef} style={{ opacity: 0 }} className="absolute inset-0">
           <div
             ref={blurMaskRef}
@@ -272,11 +276,7 @@ export function InteriorSolutionsReveal() {
         </div>
       </div>
 
-      {/* Real content — normal flow, sets the section's natural (taller-than-
-          viewport) height. Its heading sits in the same screen region as the
-          hero overlay above (in-place crossfade); the grid + button extend
-          below the fold and reveal via ordinary scrolling once the pin releases —
-          nothing here is ever forced into a fixed, clipped viewport. */}
+      {/* Real content */}
       <div
         ref={contentRef}
         style={{ opacity: 0 }}

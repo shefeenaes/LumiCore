@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Lexend, Inter } from "next/font/google";
+import { Lexend, Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, CONTACT_EMAIL, CONTACT_PHONE_2 } from "@/constants";
 import { CDN } from "@/lib/cloudinary";
@@ -10,6 +10,14 @@ const lexend = Lexend({
   variable: "--font-lexend",
   display: "swap",
   preload: true,
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas-neue",
+  display: "swap",
+  preload: false,
 });
 
 const inter = Inter({
@@ -157,7 +165,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${lexend.variable} ${inter.variable}`}>
+    <html lang="en" className={`${lexend.variable} ${inter.variable} ${bebasNeue.variable}`}>
       <body className="font-lexend antialiased">
         {children}
         <script
