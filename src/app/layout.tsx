@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Lexend, Inter } from "next/font/google";
 import "./globals.css";
-import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/constants";
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, CONTACT_EMAIL, CONTACT_PHONE_2 } from "@/constants";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -18,6 +18,12 @@ const inter = Inter({
   display: "swap",
   preload: false,
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#57B7C0",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -40,6 +46,11 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/images/brand/logo-icon.png",
+  },
   robots: {
     index: true,
     follow: true,
@@ -59,10 +70,10 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: `${SITE_URL}/og-image.jpg`,
+        url: "/images/interior/villa-reveal.jpg",
         width: 1200,
         height: 630,
-        alt: "Ideal Factory – Villa Interior Design & Manufacturing",
+        alt: "Ideal Factory – Villa Interior Design & Manufacturing in UAE",
       },
     ],
   },
@@ -70,11 +81,73 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} | Villa Interior Design & Manufacturing in UAE`,
     description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/og-image.jpg`],
+    images: ["/images/interior/villa-reveal.jpg"],
   },
   alternates: {
     canonical: SITE_URL,
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": `${SITE_URL}/#business`,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/images/brand/logo.png`,
+      },
+      image: `${SITE_URL}/images/interior/villa-reveal.jpg`,
+      telephone: CONTACT_PHONE_2,
+      email: CONTACT_EMAIL,
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "AE",
+        addressRegion: "Dubai",
+      },
+      areaServed: [
+        { "@type": "City", name: "Dubai" },
+        { "@type": "City", name: "Abu Dhabi" },
+        { "@type": "City", name: "Sharjah" },
+        { "@type": "Country", name: "United Arab Emirates" },
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Villa Interior Solutions",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: "Kitchen Design & Manufacturing" },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: "Wardrobe & Closet Manufacturing" },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: "Wooden Door Manufacturing" },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: "uPVC Window Systems" },
+          },
+        ],
+      },
+      priceRange: "$$",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}/#business` },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -84,7 +157,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${lexend.variable} ${inter.variable}`}>
-      <body className="font-lexend antialiased">{children}</body>
+      <body className="font-lexend antialiased">
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </body>
     </html>
   );
 }

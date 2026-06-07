@@ -3,7 +3,7 @@ import PaletteIcon from "@/components/ui/icons/PaletteIcon";
 import PlaySquareIcon from "@/components/ui/icons/PlaySquareIcon";
 
 export const SITE_NAME = "Ideal Factory";
-export const SITE_URL = "https://www.idealhomeuae.com";
+export const SITE_URL = "https://lumi-core.vercel.app";
 export const SITE_DESCRIPTION =
   "Design & Delivery of Your Villa Interiors Made Simple. Kitchens, closets, doors, and premium uPVC windows designed, manufactured, and installed by one trusted Emirati factory.";
 
