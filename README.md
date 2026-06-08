@@ -4,7 +4,11 @@ A pixel-perfect, production-ready homepage replication of [Ideal Factory / Ideal
 
 ## Live Demo
 
-> Deploy to Vercel and paste the URL here.
+**[https://lumi-core.vercel.app/](https://lumi-core.vercel.app/)**
+
+## Project Notes
+
+Full write-up of approach, design decisions, and trade-offs: **[PROJECT_NOTES.pdf](PROJECT_NOTES.pdf)**
 
 ## Tech Stack
 
@@ -13,9 +17,10 @@ A pixel-perfect, production-ready homepage replication of [Ideal Factory / Ideal
 | Framework | Next.js 15 (App Router) |
 | Language | TypeScript 5 (strict) |
 | Styling | Tailwind CSS 3 |
-| Animation | Framer Motion 11 |
+| Animation | Framer Motion 11 + GSAP (ScrollTrigger) |
+| Media / CDN | Cloudinary (via `next-cloudinary`) — `f_auto,q_auto` images & video |
 | Icons | Lucide React |
-| Fonts | next/font/google — Poppins + Inter |
+| Fonts | next/font/google — Lexend + Inter + Bebas Neue |
 | Linting | ESLint + next/core-web-vitals |
 | Formatting | Prettier + prettier-plugin-tailwindcss |
 | Git hooks | Husky + lint-staged |
@@ -67,8 +72,10 @@ src/
 │
 ├── constants/index.ts      — Site-wide constants (name, URL, copy)
 ├── types/index.ts          — Shared TypeScript types
-├── hooks/useMediaQuery.ts  — Responsive hook
-└── lib/utils.ts            — cn() helper (clsx + tailwind-merge)
+├── hooks/useMediaQuery.ts  — matchMedia breakpoint hook (e.g. testimonials carousel)
+└── lib/
+    ├── cloudinary.ts       — CDN URL helpers + asset map (f_auto,q_auto)
+    └── utils.ts            — cn() helper (clsx + tailwind-merge)
 ```
 
 ## Getting Started
@@ -102,14 +109,21 @@ npm i -g vercel
 vercel
 
 # Option B — Push to GitHub, then import at vercel.com
-git remote add origin https://github.com/<your-username>/ideal-factory.git
+git remote add origin https://github.com/shefeenaes/LumiCore.git
 git push -u origin main
 # → Import repo at vercel.com/new
 ```
 
 ## Environment Variables
 
-No environment variables are required. All content is static.
+All media is served from Cloudinary. The cloud name has a sensible default baked in, but you can override it:
+
+```bash
+# .env.local (optional — falls back to the project's cloud name)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your-cloud-name
+```
+
+The `upload` / `upload:compressed` / `compress` npm scripts (used to push assets to Cloudinary) additionally require `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` — only needed if you re-upload assets, not to run the site.
 
 ## Architecture Decisions
 
@@ -120,18 +134,17 @@ All section components that don't require interactivity (Hero, Approach, WhyChoo
 Content lives in `/src/data/*.ts` typed arrays. In a production app these would be replaced with CMS calls (Sanity, Contentful) without touching any component code.
 
 ### Animation Strategy
-Framer Motion is used surgically:
-- `InteriorSolutionsReveal` — scroll-driven `useScroll` / `useTransform` for the letter-reveal
-- Section entry animations — `whileInView` with `once: true` (fires once, no repeat)
-- MobileMenu panel — `AnimatePresence` spring slide
-- Testimonials — `AnimatePresence` crossfade between pages
+Two libraries, each where it fits best:
+- `InteriorSolutionsReveal` (the "OUR INTERIOR SOLUTIONS" text-masked image reveal) — **GSAP** with `ScrollTrigger`: a pinned, scrubbed timeline zooms the Bebas Neue letters while a Cloudinary villa image is revealed through them via `background-clip: text`, then hands off to the real section content.
+- Section entry animations — Framer Motion `whileInView` with `once: true` (fires once, no repeat)
+- MobileMenu panel — Framer Motion `AnimatePresence` spring slide
+- Portfolio grid — Framer Motion `layout` + `AnimatePresence` when filtering by category
 
-### CSS Custom Utilities
-- `.marble-bg` — multi-layer radial gradients simulating dark stone texture
-- `.glass-card` — `backdrop-filter: blur` glassmorphism for the hero card
-- `.text-outlined` — `-webkit-text-stroke` for the outlined text phase
-- `.text-image-filled` — `background-clip: text` for the image-filled text phase
-- `.oval-container` — asymmetric `border-radius` for the villa image pill
+### Media (Cloudinary)
+All images and video are served from Cloudinary through a small helper (`src/lib/cloudinary.ts`):
+- `f_auto,q_auto` (and `vc_auto,q_auto` for video) → automatic WebP/AVIF and quality, smaller payloads
+- Edge CDN delivery keeps assets out of the bundle/repo and fast worldwide
+- Asset upload is reproducible via the `npm run upload` / `compress` scripts
 
 ## Responsive Strategy
 
@@ -145,13 +158,14 @@ Mobile-first approach throughout. Breakpoints:
 
 - All typography scales with `sm:` / `lg:` variants
 - Grid layouts switch from 1-col → 2-col → 3-col
-- The "OUR INTERIOR SOLUTIONS" text scales with `13vw` → `10vw` (viewport-relative)
+- The "OUR INTERIOR SOLUTIONS" reveal text sizes with `clamp(16px, min(18vw, 18vh), 160px)` so it fills the viewport on any screen, then GSAP animates the zoom
 - Mobile menu replaces desktop nav on narrow screens
 - Images use `next/image` with responsive `sizes` attribute
 
 ## SEO
 
-- Full Metadata API (`title`, `description`, `openGraph`, `twitter`)
+- Full Metadata API (`title` template, `description`, keywords, `openGraph`, `twitter`, `canonical`)
+- JSON-LD structured data — `LocalBusiness` + `WebSite` schema (services, service area, contact)
 - `sitemap.ts` → `/sitemap.xml`
 - `robots.ts` → `/robots.txt`
 - Semantic HTML: `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`, `<address>`
@@ -161,9 +175,10 @@ Mobile-first approach throughout. Breakpoints:
 
 ## Performance
 
-- Hero image marked `priority` — preloaded, not lazy
-- All other images lazy-loaded (Next.js default)
-- `next/font/google` inlines critical font CSS — no render-blocking external requests
-- Only interactive sections ship client JS (`"use client"`)
-- Static rendering for all pages (no SSR waterfall)
+- **Cloudinary `f_auto,q_auto`** — modern formats (WebP/AVIF) and automatic quality, served from the edge
+- `next/image` with responsive `sizes` for the portfolio grid; large decorative layers use CSS backgrounds
+- `next/font/google` self-hosts fonts with `display: swap`; non-critical faces use `preload: false`
+- Only interactive sections ship client JS (`"use client"`); the rest render on the server
+- Static rendering for the homepage (no SSR waterfall)
 - Tailwind CSS tree-shakes unused utilities at build time
+- SEO: full Metadata API, JSON-LD (`LocalBusiness` + `WebSite`), `sitemap.ts`, `robots.ts`

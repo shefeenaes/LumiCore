@@ -84,7 +84,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               {/* CTA */}
               <div className="p-3">
                 <Button href="#contact" onClick={onClose} className="mt-2 w-full text-sm">
-                  <PhoneIcon className="h-5 w-5 shrink-0" />
+                  <PhoneIcon className="h-5 w-5 shrink-0" color="currentColor" />
                   Start Your Project
                 </Button>
               </div>

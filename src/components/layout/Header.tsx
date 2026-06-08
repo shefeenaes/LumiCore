@@ -67,7 +67,7 @@ export function Header() {
           {/* Right: CTA */}
           <div className="flex items-center gap-3">
             <Button href="#contact" className="hidden text-sm sm:inline-flex">
-              <PhoneIcon className="h-5 w-5 shrink-0" />
+              <PhoneIcon className="h-5 w-5 shrink-0" color="currentColor" />
               Start Your Project
             </Button>
           </div>

@@ -61,18 +61,18 @@ export function ServiceCard({
         />
 
         {/* Service icon badge */}
-        <div className="absolute left-[26px] top-[26px] flex h-14 w-14 items-center justify-center rounded-[10px] bg-white">
-          <Icon className="h-[34px] w-[34px]" color="#57B7C0" />
+        <div className="absolute left-[26px] top-[26px] flex items-center justify-center rounded-[10px] bg-white p-2">
+          <Icon className="h-[32.5px] w-[32.5px]" color="#57B7C0" />
         </div>
       </div>
 
       {/* Content row: text left, arrow right */}
       <div className="flex w-full flex-1 flex-row items-center justify-between px-5 py-5">
-        <div>
-          <h3 className="font-inter text-2xl font-semibold leading-[1.3] text-white">
+        <div className="flex flex-col gap-3">
+          <h3 className="font-inter text-xl font-bold leading-[1.3] text-white md:text-[40px]">
             {service.title}
           </h3>
-          <p className="font-inter text-base font-normal leading-[1.5] text-white/90">
+          <p className="font-inter text-xs font-normal leading-[1.5] text-white/90 md:text-base">
             {service.description}
           </p>
         </div>

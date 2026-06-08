@@ -8,7 +8,7 @@ interface PhoneIconProps {
 export default function PhoneIcon({
   width = 25,
   height = 25,
-  color = "white",
+  color = "currentColor",
   className,
 }: PhoneIconProps) {
   return (

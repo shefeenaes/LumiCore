@@ -34,7 +34,7 @@ export function WhyChooseSection() {
                 alt="3D rendered modern kitchen design illustration"
                 width={692}
                 height={565}
-                className="relative z-10 w-full max-w-sm object-contain drop-shadow-2xl lg:absolute lg:bottom-[-37px] lg:left-0 lg:w-[554px] lg:max-w-none"
+                className="relative z-10 w-full max-w-[300px] object-contain drop-shadow-2xl sm:max-w-xs lg:absolute lg:bottom-[-37px] lg:left-0 lg:w-[554px] lg:max-w-none"
                 sizes="(max-width: 1024px) 80vw, 500px"
               />
             </div>
@@ -75,8 +75,8 @@ export function WhyChooseSection() {
               </ul>
 
               <div className="mt-8">
-                <Button className="bg-white text-primary">
-                  <PhoneIcon className="h-4 w-4" color="#57b7c0" />
+                <Button variant="inverted">
+                  <PhoneIcon className="h-4 w-4" color="currentColor" />
                   Start Your Free 3D Design
                 </Button>
               </div>

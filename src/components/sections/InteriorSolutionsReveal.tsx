@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 
 const BASE: React.CSSProperties = {
   display: "block",
-  fontFamily: "var(--font-lexend), sans-serif",
+  fontFamily: "var(--font-bebas-neue), sans-serif",
   fontWeight: 400,
   textTransform: "uppercase",
   lineHeight: "1.2",
@@ -50,9 +50,9 @@ export function InteriorSolutionsReveal() {
 
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      // Mirror the CSS clamp(16px, min(11vw, 18vh), 160px) exactly so the
+      // Mirror the CSS clamp(16px, min(18vw, 18vh), 160px) exactly so the
       // GSAP starting size always matches what the static marble layer renders.
-      const startFontSize = Math.min(160, Math.max(16, Math.min(vw * 0.11, vh * 0.18)));
+      const startFontSize = Math.min(160, Math.max(16, Math.min(vw * 0.18, vh * 0.18)));
       const endFontSize = vw < 640 ? Math.round(vw * 1.6) : 1000;
 
       const maskState = { outer: 200, inner: 180 };
@@ -162,7 +162,7 @@ export function InteriorSolutionsReveal() {
           }}
         >
           {WORDS.map((w) => (
-            <span key={w} style={{ ...BASE, fontSize: "clamp(16px, min(11vw, 18vh), 160px)" }}>
+            <span key={w} style={{ ...BASE, fontSize: "clamp(16px, min(18vw, 18vh), 160px)" }}>
               {w}
             </span>
           ))}
@@ -181,8 +181,8 @@ export function InteriorSolutionsReveal() {
               className="reveal-word"
               style={{
                 ...BASE,
-                fontSize: "clamp(16px, min(11vw, 18vh), 160px)",
-                WebkitTextStroke: "clamp(1px, 0.25vw, 3px) white",
+                fontSize: "clamp(16px, min(18vw, 18vh), 160px)",
+                WebkitTextStroke: "0.02em white",
                 color: "transparent",
               }}
             >
@@ -206,8 +206,8 @@ export function InteriorSolutionsReveal() {
                 className="reveal-word"
                 style={{
                   ...BASE,
-                  fontSize: "clamp(16px, min(11vw, 18vh), 160px)",
-                  WebkitTextStroke: "clamp(1.5px, 0.3vw, 4px) white",
+                  fontSize: "clamp(16px, min(18vw, 18vh), 160px)",
+                  WebkitTextStroke: "0.026em white",
                   color: "#0d0d0d",
                   paintOrder: "stroke fill",
                 }}
@@ -231,7 +231,7 @@ export function InteriorSolutionsReveal() {
               <span
                 key={w}
                 className="reveal-word"
-                style={{ ...BASE, fontSize: "clamp(16px, min(11vw, 18vh), 160px)" }}
+                style={{ ...BASE, fontSize: "clamp(16px, min(18vw, 18vh), 160px)" }}
               >
                 {w}
               </span>

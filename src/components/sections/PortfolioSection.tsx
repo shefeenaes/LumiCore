@@ -36,7 +36,7 @@ export function PortfolioSection() {
     >
       {/* Decorative top-left background — masked & tinted to primary color */}
       <div
-        className="pointer-events-none absolute left-0 top-0 z-0 h-[280px] w-[200px] bg-primary sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
+        className="pointer-events-none absolute left-0 top-0 z-0 h-[360px] w-[260px] bg-primary sm:h-[450px] sm:w-[320px] lg:h-[1020px] lg:w-[296px] xl:h-full xl:w-full"
         style={{
           WebkitMaskImage: `url(${CDN.portfolio.sectionBg})`,
           maskImage: `url(${CDN.portfolio.sectionBg})`,
